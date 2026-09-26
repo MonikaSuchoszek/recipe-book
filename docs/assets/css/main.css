@@ -689,6 +689,13 @@ body:has(dialog[open]) { overflow: hidden; }
 
 /* ---------- Search page ---------- */
 .search__bar { margin-bottom: 12px; }
+/* Filter counts arrive asynchronously and hide the filters with no recipes, so
+   everything below the search bar stays hidden until they are in and then fades
+   in; otherwise filters visibly vanish as the page appears. The delayed
+   animation reveals it anyway if the script never runs */
+.search > :not(.search__bar) { transition: opacity .25s ease; }
+.js .search:not(.is-ready) > :not(.search__bar) { opacity: 0; visibility: hidden; animation: reveal 0s 4s forwards; }
+@keyframes reveal { to { opacity: 1; visibility: visible; } }
 .search__toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
 .search__filter-button { min-height: 44px; padding: 8px 16px; }
 .search__summary { color: var(--muted); font-weight: 700; font-size: .92rem; text-align: right; }

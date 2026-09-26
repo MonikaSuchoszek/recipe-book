@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run clean && eleventy && pagefind --site docs",
+    "build": "npm run photos && npm run clean && eleventy && pagefind --site docs",
     "serve": "npm run build && eleventy --serve",
     "clean": "node -e \"require('fs').rmSync('docs',{recursive:true,force:true})\"",
     "photos": "python3 scripts/shrink_photos.py src/assets/images/recipes"

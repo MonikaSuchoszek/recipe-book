@@ -11,9 +11,9 @@ https://monikasuchoszek.github.io/recipe-book/. See `SPEC.html` for the full spe
 Note: open the dev server at http://127.0.0.1:8080/recipe-book/ (`localhost` may not work from a browser outside the dev container).
 
 ## Commands
-- `npm run build`: clean `docs/`, run Eleventy (validates every recipe first), build the Pagefind search index
-- `npm run serve`: build once (so search works), then the dev server with live reload
-- `npm run photos`: shrink new photos in `src/assets/images/recipes/` and strip their metadata
+- `npm run build`: shrink new photos (`npm run photos`), clean `docs/`, run Eleventy (validates every recipe first), build the Pagefind search index
+- `npm run serve`: build once (so photos are shrunk and search works), then the dev server with live reload
+- `npm run photos`: shrink new photos in `src/assets/images/recipes/` and strip their metadata (also runs as part of build and serve)
 
 ## Adding a recipe
 Create `src/recipes/<name>.md` (the file name becomes the URL) with the frontmatter described in `SPEC.html`.
@@ -31,8 +31,9 @@ A recipe without photos shows its category illustration, so photos are optional 
    └── slice.jpg              gallery photo
    ```
    Any size straight from the phone or camera is fine.
-2. **Shrink them:** `npm run photos`. This overwrites the files *in place*: longest side capped at 2000 px,
-   rotation fixed, all metadata (including GPS location) removed. Keep your own copy if you want the full-res originals.
+2. **They are shrunk automatically** by `npm run build` and `npm run serve` (or on their own with `npm run photos`).
+   This overwrites the files *in place*: longest side capped at 2000 px, rotation fixed, all metadata (including GPS
+   location) removed. Keep your own copy if you want the full-res originals.
 3. **Link them in the recipe's frontmatter**, by file name only (no folder, no `/`):
    ```yaml
    ---
@@ -52,7 +53,7 @@ A recipe without photos shows its category illustration, so photos are optional 
 | Stage | Where | What |
 |---|---|---|
 | You drop it in | `src/assets/images/recipes/<name>/` | Any size |
-| `npm run photos` | same file, overwritten | Max 2000 px, metadata stripped; this is the version committed to git |
+| `npm run photos` (first step of build and serve) | same file, overwritten | Max 2000 px, metadata stripped; this is the version committed to git |
 | `npm run build` | `docs/assets/images/recipes/<name>/` | WebP copies at 400, 800 and 1600 px wide (capped at the photo's own width), with hashed file names like `eV3jaT9dvg-800.webp`; the browser picks the right one per screen |
 
 You never reference the generated files yourself; the templates do that. Never edit or add photos in `docs/`.

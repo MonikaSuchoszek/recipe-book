@@ -43,7 +43,7 @@
 <body>
 <header class="doc"><div>
   <h1>Recipe Book, specification</h1>
-  <p>Living document. Add features here as we discuss them. Version 1.1, 2026-09-26.</p>
+  <p>Living document. Add features here as we discuss them. Version 1.6, 2026-09-26.</p>
 </div></header>
 <main>
 
@@ -428,6 +428,7 @@ ingredients:
   <li>UI: <strong>our own UI on the Pagefind JavaScript API</strong> (<code>search.js</code>), not the Component UI. The Component UI was tried first but is 175 KB of script and can't render results as our recipe cards; the planner's dish picker needs the JavaScript API anyway. Results are rendered from a small recipe list embedded in the page (title, thumbnail, category, tags, servings), with Pagefind's excerpt (matched words highlighted) under the title. The home page search box submits to <code>/search/?q=…</code>.</li>
   <li>Filters: on phones a "Filters" button (with a count badge) opens a bottom sheet with one chip group per filter and a "Show N recipes" button; on desktop the same groups form a sidebar. Active filters show as removable chips above the results. Within a group values are OR-ed, across groups AND-ed. Counts are real facet counts (each group counted without its own selection) and values that would give no results are hidden.</li>
   <li>All search state is in the URL (<code>?q=lentils&amp;diet=vegan&amp;category=soup</code>, one parameter per group slug), so tag chips on recipe pages link straight to a filtered search.</li>
+  <li>Filters with no matching recipes are hidden. Their counts load asynchronously, so everything below the search bar stays hidden until the first counts are in and then fades in; filters never vanish in front of the reader.</li>
   <li>An empty search lists all recipes. If the index can't be loaded, a notice appears and titles and descriptions are searched in the browser instead.</li>
   <li>The planner's dish picker reuses the same index through the Pagefind JavaScript API (<code>pagefind.search()</code>), so there is one search engine for the whole site.</li>
   <li>Search does not work with <code>npm run serve</code> alone until the index has been built once; a <code>serve</code> script that builds the index first is part of the setup.</li>
@@ -562,7 +563,7 @@ gallery:
 <ul>
   <li>Originals are committed in the repository, but <strong>pre-shrunk</strong> so the repository stays well under the GitHub Pages 1 GB limit.</li>
   <li><code>scripts/shrink_photos.py</code> (Python, Pillow) processes every photo in <code>src/assets/images/recipes/</code>: longest side capped at 2000 px, JPEG quality 85 (typically 300 to 500 KB), rotation from EXIF applied, and <strong>all EXIF metadata removed</strong> (including GPS location from phone photos). Already shrunk files are left alone, so it is safe to run repeatedly.</li>
-  <li>Workflow: drop phone photos in the recipe folder, run <code>npm run photos</code> (calls the script), commit.</li>
+  <li>Workflow: drop phone photos in the recipe folder, build or serve, commit. <code>npm run build</code> (and so <code>npm run serve</code>) runs <code>npm run photos</code> first, so full size photos with GPS data can't be committed by forgetting to shrink them.</li>
 </ul>
 
 <h3>Placeholder artwork for recipes without a photo</h3>
@@ -653,8 +654,8 @@ gallery:
 <h2 id="build">13. Build and deploy</h2>
 <table>
   <tr><th>Command</th><th>Does</th></tr>
-  <tr><td><code>npm run build</code></td><td>Clean <code>docs/</code>, run Eleventy, run Pagefind on <code>docs/</code>.</td></tr>
-  <tr><td><code>npm run photos</code></td><td>Shrink new photos and strip their metadata (<code>scripts/shrink_photos.py</code>).</td></tr>
+  <tr><td><code>npm run build</code></td><td>Shrink new photos (<code>npm run photos</code>), clean <code>docs/</code>, run Eleventy, run Pagefind on <code>docs/</code>.</td></tr>
+  <tr><td><code>npm run photos</code></td><td>Shrink new photos and strip their metadata (<code>scripts/shrink_photos.py</code>). Runs automatically as the first step of <code>npm run build</code>.</td></tr>
   <tr><td><code>npm run serve</code></td><td>Build the search index once, then Eleventy dev server with live reload on port 8080.</td></tr>
 </table>
 <ul>
@@ -688,6 +689,8 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.6, 2026-09-26</strong>: <code>npm run build</code> (and so <code>npm run serve</code>) shrinks photos first, so oversized photos and their metadata never get committed by accident.</li>
+  <li><strong>1.5, 2026-09-26</strong>: search page fades in once filter counts have loaded, instead of showing every filter and then hiding the empty ones.</li>
   <li><strong>1.4, 2026-09-26</strong>: footer links (All recipes, Search, Planner) removed; they duplicated the top nav and the bottom tabbar. Home page tagline shortened to "Healthy everyday recipes."</li>
   <li><strong>1.3, 2026-09-26</strong>: footer appearance control shrunk from a three-option segmented control to "Mode:" plus one icon button that cycles System → Light → Dark. Nunito 700 preloaded too, which stops the nav buttons shifting between pages. Planner thumbnails are looked up by recipe slug instead of the image URL saved with the plan, so plans saved before a URL change or a new photo still show the right image.</li>
   <li><strong>1.2, 2026-09-26</strong>: nav links no longer shift between pages (<code>scrollbar-gutter: stable</code>); page switches cross-fade with the header held still (view transitions) and nav pages are prefetched (speculation rules).</li>

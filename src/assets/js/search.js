@@ -90,6 +90,8 @@ function renderCounts(counts) {
   for (const fieldset of els.filters.querySelectorAll("fieldset")) {
     fieldset.hidden = [...fieldset.querySelectorAll(".filter-chip")].every((chip) => chip.hidden);
   }
+  // The page is hidden until the first counts are in (see main.css)
+  root.classList.add("is-ready");
 }
 
 function renderActiveFilters() {
