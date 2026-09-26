@@ -4,19 +4,12 @@
       <img src="{{ '/assets/illustrations/logo.svg' | url }}" alt="" width="28" height="28">
       <span>{{ site.name }}</span>
     </p>
-    <ul class="site-footer__links">
-      <li><a href="{{ '/recipes/' | url }}">All recipes</a></li>
-      <li><a href="{{ '/search/' | url }}">Search</a></li>
-      <li><a href="{{ '/planner/' | url }}">Planner</a></li>
-    </ul>
-    <fieldset class="appearance" data-appearance>
-      <legend>Appearance</legend>
-      {%- for option in [{ value: "system", label: "System", icon: "monitor" }, { value: "light", label: "Light", icon: "sun" }, { value: "dark", label: "Dark", icon: "moon" }] %}
-      <label>
-        <input type="radio" name="appearance" value="{{ option.value }}"{% if option.value == "system" %} checked{% endif %}>
-        {% icon option.icon %}<span>{{ option.label }}</span>
-      </label>
-      {%- endfor %}
-    </fieldset>
+    {#- One button cycles System → Light → Dark; CSS shows the icon for the current data-theme, so it is right before JS runs #}
+    <p class="appearance needs-js">
+      <span aria-hidden="true">Mode:</span>
+      <button type="button" class="icon-button appearance__toggle" data-appearance aria-label="Mode: System" title="Mode: System">
+        {%- icon "monitor", "appearance__icon" %}{% icon "sun", "appearance__icon" %}{% icon "moon", "appearance__icon" -%}
+      </button>
+    </p>
   </div>
 </footer>

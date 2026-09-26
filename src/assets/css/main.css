@@ -75,7 +75,8 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 72px; }
+/* Always reserve the scrollbar's space, so short and long pages are equally wide and the header never shifts */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: 72px; scrollbar-gutter: stable; }
 body {
   margin: 0;
   min-height: 100dvh;
@@ -158,6 +159,15 @@ html.js .no-js-only { display: none !important; }
 }
 .site-main:focus { outline: none; }
 
+/* Cross-fade between pages instead of a blank reload; the header and tab bar
+   get their own snapshots so they stay put while only the content fades */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+.site-header { view-transition-name: site-header; }
+.tabbar { view-transition-name: tabbar; }
+::view-transition-group(root) { animation-duration: .18s; }
+
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--line);
@@ -166,20 +176,16 @@ html.js .no-js-only { display: none !important; }
 }
 .site-footer__inner { max-width: var(--page); margin: 0 auto; display: grid; gap: 14px; justify-items: start; }
 .site-footer__brand { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--text); }
-.site-footer__links { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 18px; }
-.site-footer__links a { color: var(--muted); display: inline-block; padding: 6px 0; }
 
 /* Subtle appearance toggle: low contrast, never draws attention */
-.appearance { border: 0; margin: 0; padding: 0; display: flex; align-items: center; gap: 2px; font-size: .8rem; opacity: .85; }
-.appearance legend { float: left; margin-right: 8px; padding: 0; }
-.appearance label {
-  position: relative; display: inline-flex; align-items: center; gap: 4px;
-  padding: 6px 10px; min-height: 36px; border-radius: var(--pill); cursor: pointer;
-}
-.appearance input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
-.appearance .icon { width: 14px; height: 14px; }
-.appearance label:has(input:checked) { background: var(--surface-sunken); color: var(--text); }
-.appearance label:has(input:focus-visible) { box-shadow: var(--focus-ring); }
+.appearance { margin: 0; display: flex; align-items: center; gap: 2px; font-size: .8rem; opacity: .85; }
+.appearance__toggle { width: 36px; height: 36px; cursor: pointer; }
+.appearance__toggle:focus-visible { box-shadow: var(--focus-ring); }
+.appearance__toggle .icon { width: 16px; height: 16px; }
+.appearance__icon { display: none; }
+:root[data-theme="system"] .icon-monitor.appearance__icon,
+:root[data-theme="light"] .icon-sun.appearance__icon,
+:root[data-theme="dark"] .icon-moon.appearance__icon { display: block; }
 
 /* ---------- Buttons and chips ---------- */
 .button {
@@ -766,7 +772,7 @@ body:has(dialog[open]) { overflow: hidden; }
   .tabbar { display: none; }
   .site-main { padding-top: 20px; }
   .site-footer { padding-bottom: 32px; }
-  .site-footer__inner { grid-template-columns: auto 1fr auto; align-items: center; gap: 24px; }
+  .site-footer__inner { grid-template-columns: 1fr auto; align-items: center; gap: 24px; }
   .toaster { bottom: 24px; }
   .weekbar { top: 65px; }
   html { scroll-padding-top: 140px; }

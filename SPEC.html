@@ -412,7 +412,7 @@ ingredients:
   <tr><td>Planner</td><td><code>/planner/</code></td><td>Weekly dinner planner.</td></tr>
   <tr><td>404</td><td><code>/404.html</code></td><td>Friendly not found page with search (GitHub Pages picks this up automatically).</td></tr>
 </table>
-<p><strong>Navigation:</strong> on mobile a fixed bottom bar with Home, Search, Planner (thumb reachable). From tablet width upward the same links move to a top header.</p>
+<p><strong>Navigation:</strong> on mobile a fixed bottom bar with Home, Search, Planner (thumb reachable). From tablet width upward the same links move to a top header. The nav links sit in exactly the same spot on every page: the scrollbar's space is always reserved, so short pages without a scrollbar are not wider. Switching pages cross-fades the content while the header and tab bar stay still (cross-document view transitions, skipped for reduced motion), and the three nav pages are prefetched with speculation rules so switching is instant. Browsers without support simply load the page normally.</p>
 <p><strong>Recipe card:</strong> thumbnail (4:3), title, first category, up to two tag chips. On phones, listing pages (all recipes, category pages, search results) show the card as a compact row (thumbnail left, text right) so long lists stay scannable; from 640px up they are a grid. "Recently added" on the home page is a sideways swipeable row on phones.</p>
 <p><strong>Home page details:</strong> category tiles are shown only for categories that have recipes. A "This week" card shows tonight's dinner (or how many dinners are planned) with a dot per day, read from the planner in the browser.</p>
 <p><strong>Recipe page details:</strong> on phones the photo is full width and the content slides over it as a rounded sheet; on desktop the title sits next to the photo and the ingredients (with portion counter) stay visible beside the method. Below the "Add to planner" button a note says when the recipe is planned ("Planned for Tue 29 Sept · View planner").</p>
@@ -512,7 +512,7 @@ ingredients:
 <h3>Light and dark mode</h3>
 <ul>
   <li>Three settings: <strong>System</strong> (default, follows the device through <code>prefers-color-scheme</code>), <strong>Light</strong> and <strong>Dark</strong>.</li>
-  <li><strong>Subtle toggle:</strong> not in the header or bottom bar. It sits in the site footer as a small, low contrast control ("Appearance: System · Light · Dark", a compact segmented control with a sun/moon icon). It is reachable on every page but never draws attention.</li>
+  <li><strong>Subtle toggle:</strong> not in the header or bottom bar. It sits in the site footer as a small, low contrast control ("Mode:" followed by a single icon button: monitor for System, sun for Light, moon for Dark; each click cycles System → Light → Dark, and the tooltip names the current and next mode). It is reachable on every page but never draws attention.</li>
   <li>The choice is stored in <code>localStorage</code> under <code>recipeBook.theme</code> (<code>"system"</code>, <code>"light"</code> or <code>"dark"</code>). If storage is unavailable, the site follows the system setting.</li>
   <li>A tiny inline script in <code>&lt;head&gt;</code> reads the setting and sets <code>data-theme</code> on <code>&lt;html&gt;</code> before the page renders, so there is no flash of the wrong theme. It also adds a <code>js</code> class, so controls that need JavaScript (steppers, "Add to planner") are hidden without it.</li>
   <li>Colours are CSS <code>light-dark()</code> pairs; <code>data-theme</code> only sets <code>color-scheme</code> (<code>light dark</code> for System), so every colour is defined once.</li>
@@ -535,7 +535,7 @@ ingredients:
 <ul>
   <li>Weights: 400 (body), 700 (subheadings, ingredient amounts, buttons), 800 (page titles). Headings get slightly tighter letter spacing (<code>-0.01em</code>).</li>
   <li>Ingredient amounts use tabular numbers (<code>font-variant-numeric: tabular-nums</code>) so they line up and don't jump while the portion counter changes.</li>
-  <li>Self hosted with the <code>@fontsource/nunito</code> npm package (WOFF2, <code>font-display: swap</code>), copied into the build: no requests to Google, works offline.</li>
+  <li>Self hosted with the <code>@fontsource/nunito</code> npm package (WOFF2, <code>font-display: swap</code>), copied into the build: no requests to Google, works offline. The latin 400, 700 and 800 files are preloaded, so text never swaps from the fallback after the first paint (a late 700 made the nav labels change width and the nav buttons shift).</li>
   <li>Subsets: <strong>latin and latin-ext</strong>, because recipe names contain characters like ę, ł, ż (Kruche ciasto na tartę).</li>
   <li>Fallback stack: <code>Nunito, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif</code>.</li>
   <li>Base size 17px on phones, line height 1.6 for body text, max line length about 70 characters on wide screens.</li>
@@ -688,6 +688,9 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.4, 2026-09-26</strong>: footer links (All recipes, Search, Planner) removed; they duplicated the top nav and the bottom tabbar. Home page tagline shortened to "Healthy everyday recipes."</li>
+  <li><strong>1.3, 2026-09-26</strong>: footer appearance control shrunk from a three-option segmented control to "Mode:" plus one icon button that cycles System → Light → Dark. Nunito 700 preloaded too, which stops the nav buttons shifting between pages. Planner thumbnails are looked up by recipe slug instead of the image URL saved with the plan, so plans saved before a URL change or a new photo still show the right image.</li>
+  <li><strong>1.2, 2026-09-26</strong>: nav links no longer shift between pages (<code>scrollbar-gutter: stable</code>); page switches cross-fade with the header held still (view transitions) and nav pages are prefetched (speculation rules).</li>
   <li><strong>1.1, 2026-09-26</strong>: public URL moved to <code>monikasuchoszek.github.io/recipe-book</code> (pathPrefix <code>/recipe-book/</code>, repo named <code>recipe-book</code>, no custom domain).</li>
   <li><strong>1.0, 2026-09-26</strong>: first implementation. Decisions made while building: own search UI on the Pagefind JavaScript API instead of the Component UI, with a filter sheet on phones, facet counts and search state in the URL; planner interaction details (dish picker, day toggle rows with inline replace confirmation, Undo toasts, day sheet for portions, swipe between weeks, <code>?week=</code>); planner grid from 1024px; compact card rows on phones; solid/on-solid shades and <code>light-dark()</code> colours; unit plural only above 1; site name in Nunito; project structure updated. Three new open questions.</li>
   <li><strong>0.9, 2026-09-26</strong>: recipe URLs come only from the file name (never categories or tags), enforced by a fixed permalink. Ingredient units are written in the singular and pluralised on display. Recipes without a method yet are listed in the build info.</li>

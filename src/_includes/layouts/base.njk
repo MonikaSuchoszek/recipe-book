@@ -20,8 +20,10 @@
   </script>
   <meta name="theme-color" content="#FBFAF5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#121814" media="(prefers-color-scheme: dark)">
-  <link rel="preload" href="{{ '/assets/fonts/nunito-latin-400-normal.woff2' | url }}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ '/assets/fonts/nunito-latin-800-normal.woff2' | url }}" as="font" type="font/woff2" crossorigin>
+  {#- Every weight above the fold is preloaded (700 is the nav labels): a late font swaps in wider or narrower text and nudges the nav buttons #}
+  {%- for weight in [400, 700, 800] %}
+  <link rel="preload" href="{{ ('/assets/fonts/nunito-latin-' + weight + '-normal.woff2') | url }}" as="font" type="font/woff2" crossorigin>
+  {%- endfor %}
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | url }}">
   <link rel="stylesheet" href="{{ '/assets/css/taxonomy.css' | url }}">
   <link rel="icon" type="image/svg+xml" href="{{ '/assets/illustrations/favicon.svg' | url }}">
@@ -62,6 +64,10 @@
 
   <div class="toaster" id="toaster" aria-live="polite" aria-atomic="true"></div>
 
+  {#- Fetch the main pages ahead of time so switching between them is instant (browsers without support ignore this) #}
+  <script type="speculationrules">
+    { "prefetch": [{ "where": { "selector_matches": ".top-nav a, .tabbar a" }, "eagerness": "immediate" }] }
+  </script>
   <script type="module" src="{{ '/assets/js/theme.js' | url }}"></script>
   {%- for script in scripts %}
   <script type="module" src="{{ ('/assets/js/' + script) | url }}"></script>

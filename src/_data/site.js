@@ -3,5 +3,5 @@ export default {
   // Full public URL, used for canonical links and social previews
   url: "https://monikasuchoszek.github.io/recipe-book/",
   lang: "en",
-  description: "Healthy, everyday recipes that scale to any number of portions, plus a weekly dinner planner.",
+  description: "Healthy, everyday recipes and a weekly dinner planner.",
 };

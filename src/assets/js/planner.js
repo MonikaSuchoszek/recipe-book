@@ -49,6 +49,12 @@ function recipeUrl(entry) {
   return `${base}recipes/${encodeURIComponent(entry.slug)}/?portions=${entry.portions}`;
 }
 
+// Look the image up by slug instead of trusting the saved URL: saved URLs go stale when
+// the site moves (old path prefix) or a recipe gets a new photo
+function entryImage(entry) {
+  return recipeBySlug.get(entry.slug)?.image ?? `${base}assets/illustrations/plate.svg`;
+}
+
 function portionsText(entry) {
   const servings = recipeBySlug.get(entry.slug)?.servings;
   if (!servings) return `${entry.portions} ${entry.portions === 1 ? "portion" : "portions"}`;
@@ -61,7 +67,7 @@ function entryMarkup(iso, entry, date) {
   return `
     <div class="entry ${escapeHtml(categoryClass)}${highlight.has(iso) ? " is-new" : ""}">
       <a class="entry__media" href="${escapeHtml(url)}" tabindex="-1" aria-hidden="true">
-        <img class="entry__thumb" src="${escapeHtml(entry.image || `${base}assets/illustrations/plate.svg`)}" alt="" width="72" height="54" loading="lazy">
+        <img class="entry__thumb" src="${escapeHtml(entryImage(entry))}" alt="" width="72" height="54" loading="lazy">
       </a>
       <div class="entry__body">
         <a class="entry__title" href="${escapeHtml(url)}">${escapeHtml(entry.title)}</a>
@@ -145,7 +151,7 @@ function openDaySheet(iso) {
   const body = daySheet.querySelector("[data-portions-body]");
   body.innerHTML = `
     <div class="plan-dish">
-      <img src="${escapeHtml(entry.image)}" alt="" width="64" height="48">
+      <img src="${escapeHtml(entryImage(entry))}" alt="" width="64" height="48">
       <strong>${escapeHtml(entry.title)}</strong>
     </div>
     <section class="plan-section" aria-labelledby="day-portions-title">
