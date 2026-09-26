@@ -43,7 +43,7 @@
 <body>
 <header class="doc"><div>
   <h1>Recipe Book, specification</h1>
-  <p>Living document. Add features here as we discuss them. Version 1.0, 2026-09-26.</p>
+  <p>Living document. Add features here as we discuss them. Version 1.1, 2026-09-26.</p>
 </div></header>
 <main>
 
@@ -102,10 +102,10 @@
 
 <h3>Recipe URLs</h3>
 <ul>
-  <li>The URL comes <strong>only from the file name</strong>: <code>src/recipes/oat-banana-waffles.md</code> becomes <code>/cookbook/recipes/oat-banana-waffles/</code>.</li>
+  <li>The URL comes <strong>only from the file name</strong>: <code>src/recipes/oat-banana-waffles.md</code> becomes <code>/recipe-book/recipes/oat-banana-waffles/</code>.</li>
   <li>Categories, tags, title and date are <strong>never</strong> part of a recipe URL. Adding, removing or renaming a category or tag, or retitling a recipe, doesn't change any recipe URL, so bookmarks, shared links and planner entries keep working.</li>
   <li>This is enforced in <code>src/recipes/recipes.11tydata.js</code> with a fixed <code>permalink</code> built from <code>page.fileSlug</code>. A <code>permalink</code> in a recipe's own frontmatter fails the build.</li>
-  <li>Category pages (<code>/cookbook/categories/&lt;slug&gt;/</code>) are separate listing pages. They link to recipes but never contain them in their path.</li>
+  <li>Category pages (<code>/recipe-book/categories/&lt;slug&gt;/</code>) are separate listing pages. They link to recipes but never contain them in their path.</li>
   <li>File names: lowercase, words separated by hyphens, English. Renaming a file is the only thing that changes a URL, so avoid it once a recipe is published.</li>
 </ul>
 
@@ -473,9 +473,9 @@ ingredients:
   "version": 1,
   "days": {
     "2026-09-28": { "slug": "oat-banana-waffles", "title": "Oat &amp; Banana Waffles",
-                    "image": "/cookbook/assets/images/recipes/oat-banana-waffles.jpg", "portions": 4 },
+                    "image": "/recipe-book/assets/images/recipes/oat-banana-waffles.jpg", "portions": 4 },
     "2026-09-29": { "slug": "oat-banana-waffles", "title": "Oat &amp; Banana Waffles",
-                    "image": "/cookbook/assets/images/recipes/oat-banana-waffles.jpg", "portions": 2 }
+                    "image": "/recipe-book/assets/images/recipes/oat-banana-waffles.jpg", "portions": 2 }
   }
 }</code></pre>
 <ul>
@@ -659,10 +659,10 @@ gallery:
 </table>
 <ul>
   <li>Deploy: commit the rebuilt <code>docs/</code> and push to <code>main</code>. GitHub Pages is set to "Deploy from a branch", <code>main</code>, <code>/docs</code>.</li>
-  <li><strong>Public URL: <code>https://beyond-the-known.eu/cookbook/</code>.</strong> Eleventy's <code>pathPrefix</code> is <code>"/cookbook/"</code> and <code>site.url</code> in <code>src/_data/site.js</code> is the full URL (used for canonical links and social previews).</li>
+  <li><strong>Public URL: <code>https://monikasuchoszek.github.io/recipe-book/</code>.</strong> Eleventy's <code>pathPrefix</code> is <code>"/recipe-book/"</code> and <code>site.url</code> in <code>src/_data/site.js</code> is the full URL (used for canonical links and social previews).</li>
   <li>All internal links and asset paths go through Eleventy's <code>url</code> filter (HTML Base plugin), so no hardcoded <code>/</code> paths. The planner and search scripts get the prefix from a <code>data-base</code> attribute on <code>&lt;html&gt;</code>.</li>
-  <li>GitHub setup: a project site is served under the custom domain of the owner's user site. So <code>beyond-the-known.eu</code> is configured as custom domain on the <code>&lt;user&gt;.github.io</code> repository, and this repository must be named <strong><code>cookbook</code></strong> (the folder name locally doesn't matter). No <code>CNAME</code> file in this repository.</li>
-  <li><code>npm run serve</code> also serves under <code>/cookbook/</code> locally, so prefix bugs show up during development.</li>
+  <li>GitHub setup: a project site on the default GitHub Pages domain of the <code>MonikaSuchoszek</code> account, so the repository must be named <strong><code>recipe-book</code></strong> (the folder name locally doesn't matter). No custom domain and no <code>CNAME</code> file.</li>
+  <li><code>npm run serve</code> also serves under <code>/recipe-book/</code> locally, so prefix bugs show up during development.</li>
 </ul>
 
 <!-- ============================================================ -->
@@ -688,6 +688,7 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.1, 2026-09-26</strong>: public URL moved to <code>monikasuchoszek.github.io/recipe-book</code> (pathPrefix <code>/recipe-book/</code>, repo named <code>recipe-book</code>, no custom domain).</li>
   <li><strong>1.0, 2026-09-26</strong>: first implementation. Decisions made while building: own search UI on the Pagefind JavaScript API instead of the Component UI, with a filter sheet on phones, facet counts and search state in the URL; planner interaction details (dish picker, day toggle rows with inline replace confirmation, Undo toasts, day sheet for portions, swipe between weeks, <code>?week=</code>); planner grid from 1024px; compact card rows on phones; solid/on-solid shades and <code>light-dark()</code> colours; unit plural only above 1; site name in Nunito; project structure updated. Three new open questions.</li>
   <li><strong>0.9, 2026-09-26</strong>: recipe URLs come only from the file name (never categories or tags), enforced by a fixed permalink. Ingredient units are written in the singular and pluralised on display. Recipes without a method yet are listed in the build info.</li>
   <li><strong>0.8, 2026-09-26</strong>: site name set to "Recipe Book"; all open questions resolved.</li>

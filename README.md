@@ -1,14 +1,14 @@
 # recipe_book
 
 Static recipe website built with [Eleventy](https://www.11ty.dev/) and hosted on GitHub Pages at
-https://beyond-the-known.eu/cookbook/. See `SPEC.html` for the full specification.
+https://monikasuchoszek.github.io/recipe-book/. See `SPEC.html` for the full specification.
 
 ## Getting started
 1. Open this folder in VS Code and choose **Reopen in Container** (requires Docker and the Dev Containers extension).
 2. Run `claude` in the terminal and log in the first time.
 3. `npm run serve` to preview, `npm run build` to generate `docs/`.
 
-Note: open the dev server at http://127.0.0.1:8080/cookbook/ (`localhost` may not work from a browser outside the dev container).
+Note: open the dev server at http://127.0.0.1:8080/recipe-book/ (`localhost` may not work from a browser outside the dev container).
 
 ## Commands
 - `npm run build`: clean `docs/`, run Eleventy (validates every recipe first), build the Pagefind search index
