@@ -1,5 +1,5 @@
 ---
-title: Shortcrust Pastry for a Tart (Kruche ciasto na tartę)
+title: Shortcrust Pastry for a Tart
 description: Crisp, lightly sweet tart base with just five ingredients.
 date: 2026-09-26
 categories: [Baking]
