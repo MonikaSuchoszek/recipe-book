@@ -79,14 +79,24 @@
   <div>
     <p class="page-head__eyebrow">Category</p>
     <h1>Salad</h1>
-    <p class="page-head__lede">0 recipes</p>
+    <p class="page-head__lede">1 recipe</p>
   </div>
 </header>
-<div class="empty-state">
-  <img src="/recipe-book/assets/illustrations/no-results.svg" alt="" width="400" height="300">
-  <h2>No salad recipes yet</h2>
-  <p>New recipes are added regularly. In the meantime, have a look at the others.</p>
-  <a class="button button--primary" href="/recipe-book/recipes/">Browse all recipes</a>
+<div class="card-grid card-grid--adaptive">
+  
+<article class="card cat-salad">
+  <a class="card__link" href="/recipe-book/recipes/broccoli-salad/">
+    <div class="card__media"><img src="/recipe-book/assets/illustrations/salad.svg" alt="" width="400" height="300" loading="lazy" decoding="async" class="is-illustration"></div>
+    <div class="card__body">
+      <p class="card__category">Salad</p>
+      <h3 class="card__title">Broccoli Salad</h3>
+      <ul class="chips chips--small" aria-label="Tags">
+        <li class="chip tag-quick">quick</li>
+      </ul>
+    </div>
+  </a>
+</article>
+
 </div>
 
   </main>
