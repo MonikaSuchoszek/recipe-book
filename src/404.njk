@@ -1,0 +1,19 @@
+---
+layout: layouts/base.njk
+title: Page not found
+permalink: /404.html
+bodyClass: page-404
+eleventyExcludeFromCollections: true
+---
+<div class="empty-state empty-state--404">
+  <img src="{{ '/assets/illustrations/404.svg' | url }}" alt="" width="400" height="300">
+  <h1>This page is off the menu</h1>
+  <p>The recipe may have been renamed or removed. Try searching for it instead.</p>
+  <form class="searchbar" action="{{ '/search/' | url }}" method="get" role="search">
+    <label class="visually-hidden" for="missing-search">Search recipes</label>
+    {% icon "search", "searchbar__icon" %}
+    <input id="missing-search" class="searchbar__input" type="search" name="q" placeholder="Search recipes" enterkeyhint="search">
+    <button class="button button--primary searchbar__submit" type="submit">Search</button>
+  </form>
+  <a class="button button--ghost" href="{{ '/recipes/' | url }}">{% icon "book" %}<span>All recipes</span></a>
+</div>

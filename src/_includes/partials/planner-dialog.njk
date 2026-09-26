@@ -1,0 +1,13 @@
+{#- Shell of the "Add to planner" sheet; planner-dialog.js fills and drives it -#}
+<dialog class="sheet" id="plan-dialog" aria-labelledby="plan-dialog-title">
+  <div class="sheet__panel" data-sheet-panel>
+    <div class="sheet__grip" aria-hidden="true"></div>
+    <header class="sheet__header">
+      <button type="button" class="icon-button sheet__back" data-sheet-back aria-label="Back to dish list" hidden>{% icon "chevron-left" %}</button>
+      <h2 class="sheet__title" id="plan-dialog-title">Add to planner</h2>
+      <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close">{% icon "x" %}</button>
+    </header>
+    <div class="sheet__body" data-sheet-body></div>
+    <footer class="sheet__footer" data-sheet-footer hidden></footer>
+  </div>
+</dialog>

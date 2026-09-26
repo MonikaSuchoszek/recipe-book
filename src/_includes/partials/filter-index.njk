@@ -1,0 +1,13 @@
+{#- Filter definitions for search.js: Pagefind filter name, URL parameter and terms -#}
+<script type="application/json" id="filter-index">
+[
+  {
+    "filter": "category", "param": "category", "label": "Category",
+    "terms": [{% for c in terms.categories %}{ "name": {{ c.name | dump | safe }}, "slug": {{ c.slug | dump | safe }}, "className": {{ c.className | dump | safe }} }{% if not loop.last %}, {% endif %}{% endfor %}]
+  }{% for group in terms.tagGroups %},
+  {
+    "filter": {{ group.name | dump | safe }}, "param": {{ group.slug | dump | safe }}, "label": {{ group.name | dump | safe }},
+    "terms": [{% for t in group.tags %}{ "name": {{ t.name | dump | safe }}, "slug": {{ t.slug | dump | safe }}, "className": {{ t.className | dump | safe }} }{% if not loop.last %}, {% endif %}{% endfor %}]
+  }{% endfor %}
+]
+</script>

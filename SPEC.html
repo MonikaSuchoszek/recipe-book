@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recipe Book Spec</title>
+<style>
+  :root {
+    --leaf: #2f9e6e; --leaf-dark: #1f6f4c; --mint: #e3f5ec; --citrus: #f6b73c;
+    --berry: #e8546b; --sky: #4aa8d8; --cream: #fbfaf5; --ink: #1f2a24; --muted: #5d6b63;
+    --line: #dfe7e1; --code-bg: #f2f5f1;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--cream); color: var(--ink);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 24px 16px 80px; }
+  header.doc { background: linear-gradient(135deg, var(--leaf), var(--sky)); color: #fff; padding: 40px 16px; }
+  header.doc div { max-width: 860px; margin: 0 auto; }
+  header.doc h1 { margin: 0 0 4px; font-size: 2rem; }
+  header.doc p { margin: 0; opacity: .9; }
+  h2 { margin-top: 48px; padding-bottom: 6px; border-bottom: 2px solid var(--mint); color: var(--leaf-dark); }
+  h3 { margin-top: 28px; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 14px; overflow-x: auto; font-size: .85rem; line-height: 1.5; }
+  pre code { background: none; padding: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; display: block; overflow-x: auto; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--mint); }
+  .req { color: var(--berry); font-weight: 600; }
+  .note { background: #fff8e6; border-left: 4px solid var(--citrus); padding: 10px 14px; border-radius: 6px; }
+  .decided { background: var(--mint); border-left: 4px solid var(--leaf); padding: 10px 14px; border-radius: 6px; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  .swatch { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: #fff; font-size: .8rem; }
+  .swatch span { display: block; height: 56px; }
+  .swatch div { padding: 6px 8px; }
+  nav.toc ol { columns: 2; column-gap: 32px; padding-left: 20px; }
+  @media (max-width: 600px) { nav.toc ol { columns: 1; } }
+  .status { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 999px; background: var(--mint); color: var(--leaf-dark); font-weight: 600; }
+  .status.later { background: #eef3fb; color: #2d5f86; }
+  .status.open { background: #fff1d6; color: #8a5a00; }
+</style>
+</head>
+<body>
+<header class="doc"><div>
+  <h1>Recipe Book, specification</h1>
+  <p>Living document. Add features here as we discuss them. Version 1.0, 2026-09-26.</p>
+</div></header>
+<main>
+
+<nav class="toc">
+  <ol>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#stack">Tech stack</a></li>
+    <li><a href="#content-model">Recipe content model</a></li>
+    <li><a href="#taxonomy">Categories and tags</a></li>
+    <li><a href="#example">Example recipe</a></li>
+    <li><a href="#scaling">Portion scaling</a></li>
+    <li><a href="#pages">Pages and navigation</a></li>
+    <li><a href="#search">Search</a></li>
+    <li><a href="#planner">Weekly planner</a></li>
+    <li><a href="#design">Design and layout</a></li>
+    <li><a href="#assets">Images and artwork</a></li>
+    <li><a href="#structure">Project structure</a></li>
+    <li><a href="#build">Build and deploy</a></li>
+    <li><a href="#backlog">Backlog</a></li>
+    <li><a href="#open">Open questions</a></li>
+    <li><a href="#changelog">Changelog</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<h2 id="overview">1. Overview</h2>
+<p>A static, mobile first recipe website for mostly healthy dishes. Recipes are plain Markdown files with structured frontmatter. Eleventy builds the site into <code>docs/</code>, which GitHub Pages serves for free. No server side logic: search runs on a static index and the weekly planner lives in the browser's local storage.</p>
+<p>Site name: <strong>Recipe Book</strong> (header next to the logo, browser tab, social previews). Language: <strong>English</strong> (interface and recipes).</p>
+
+<h3>Goals</h3>
+<ul>
+  <li>Adding a recipe is creating one Markdown file (plus an optional photo).</li>
+  <li>Every recipe can be rescaled to any number of portions in the browser.</li>
+  <li>Fast static search with filters for categories and tags.</li>
+  <li>A weekly dinner planner that persists on the device.</li>
+  <li>Modern, bright, health focused look that works well on a phone in the kitchen.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="stack">2. Tech stack</h2>
+<table>
+  <tr><th>Concern</th><th>Choice</th><th>Why</th></tr>
+  <tr><td>Static site generator</td><td>Eleventy 3 (ESM config)</td><td>Already set up; Markdown + frontmatter is native.</td></tr>
+  <tr><td>Templates</td><td>Nunjucks layouts, Markdown content</td><td>Eleventy default, easy loops over ingredients.</td></tr>
+  <tr><td>Search</td><td>Pagefind (JavaScript API, own UI)</td><td>Indexes the built HTML, loads index chunks on demand, built in filters. No custom search engine.</td></tr>
+  <tr><td>Client side code</td><td>Vanilla JavaScript (ES modules), no framework</td><td>Only three small interactive pieces (scaler, planner, search UI).</td></tr>
+  <tr><td>Styling</td><td>Plain CSS with custom properties</td><td>Small site, no build step for CSS needed.</td></tr>
+  <tr><td>Persistence</td><td><code>localStorage</code></td><td>Planner survives reloads on the same device, no server.</td></tr>
+  <tr><td>Hosting</td><td>GitHub Pages from <code>/docs</code> on <code>main</code></td><td>Free, no CI required (build locally, commit <code>docs/</code>).</td></tr>
+  <tr><td>Python</td><td>Optional helper scripts only</td><td>E.g. image resizing or bulk recipe import later.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="content-model">3. Recipe content model</h2>
+<p>One file per recipe in <code>src/recipes/</code>. The frontmatter holds all structured data, the Markdown body holds the method.</p>
+
+<h3>Recipe URLs</h3>
+<ul>
+  <li>The URL comes <strong>only from the file name</strong>: <code>src/recipes/oat-banana-waffles.md</code> becomes <code>/cookbook/recipes/oat-banana-waffles/</code>.</li>
+  <li>Categories, tags, title and date are <strong>never</strong> part of a recipe URL. Adding, removing or renaming a category or tag, or retitling a recipe, doesn't change any recipe URL, so bookmarks, shared links and planner entries keep working.</li>
+  <li>This is enforced in <code>src/recipes/recipes.11tydata.js</code> with a fixed <code>permalink</code> built from <code>page.fileSlug</code>. A <code>permalink</code> in a recipe's own frontmatter fails the build.</li>
+  <li>Category pages (<code>/cookbook/categories/&lt;slug&gt;/</code>) are separate listing pages. They link to recipes but never contain them in their path.</li>
+  <li>File names: lowercase, words separated by hyphens, English. Renaming a file is the only thing that changes a URL, so avoid it once a recipe is published.</li>
+</ul>
+
+<h3>Frontmatter fields</h3>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+  <tr><td><code>title</code></td><td>string</td><td class="req">yes</td><td>Name of the dish.</td></tr>
+  <tr><td><code>categories</code></td><td>list of strings</td><td class="req">yes (min 1)</td><td>What kind of dish it is. Only terms from the fixed list, see <a href="#taxonomy">Categories and tags</a>.</td></tr>
+  <tr><td><code>tags</code></td><td>list of strings</td><td>no</td><td>Properties of the dish (diet, effort, main ingredient, season, audience). Only terms from the fixed list, see <a href="#taxonomy">Categories and tags</a>.</td></tr>
+  <tr><td><code>servings.amount</code></td><td>positive integer</td><td class="req">yes</td><td>Number of portions the ingredient amounts are written for (e.g. 7).</td></tr>
+  <tr><td><code>servings.unit</code></td><td>string (plural)</td><td class="req">yes</td><td>What one portion is, in plural form: servings, waffles, glasses, pancakes, muffins.</td></tr>
+  <tr><td><code>servings.unitSingular</code></td><td>string</td><td>no</td><td>Singular form, shown when the counter is at 1. Defaults to <code>unit</code> if omitted.</td></tr>
+  <tr><td><code>servings.note</code></td><td>string</td><td>no</td><td>Byline shown under the counter, e.g. "Might vary depending on the size of your waffle iron."</td></tr>
+  <tr><td><code>ingredients</code></td><td>list of ingredient items, or groups of them</td><td class="req">yes (min 1 item)</td><td>See below.</td></tr>
+  <tr><td><code>image</code></td><td>string (file name)</td><td>no</td><td>Main photo, a file in the recipe's photo folder <code>src/assets/images/recipes/&lt;slug&gt;/</code>. Used as header and thumbnail. Falls back to the category placeholder artwork.</td></tr>
+  <tr><td><code>imagePosition</code></td><td>string</td><td>no (default <code>center</code>)</td><td>Which part of the main photo stays visible when it is cropped, as a CSS <code>object-position</code>, e.g. <code>center 30%</code> or <code>left</code>. Useful for portrait phone photos.</td></tr>
+  <tr><td><code>gallery</code></td><td>list of photo items</td><td>no</td><td>Extra photos (steps, plating, a slice). Each item has <code>file</code> (required, in the same photo folder) and <code>caption</code> (optional). See <a href="#assets">Images and artwork</a>.</td></tr>
+  <tr><td><code>description</code></td><td>string</td><td>no</td><td>One sentence teaser for cards and search results.</td></tr>
+  <tr><td><code>date</code></td><td>date (YYYY-MM-DD)</td><td>no</td><td>Date added, used for "Recently added". Defaults to the file creation date (set explicitly so it survives git clones).</td></tr>
+</table>
+
+<h3>Ingredients</h3>
+<p>Ingredients are written in YAML block style: one field per line, no curly braces. There are two shapes:</p>
+<ul>
+  <li><strong>Plain list</strong> for simple recipes without sections:
+<pre><code>ingredients:
+  - name: red lentils
+    amount: 200
+    unit: g
+  - name: onion
+    amount: 1</code></pre></li>
+  <li><strong>Grouped</strong> when the recipe has sections: each key is a group name (shown as a heading, e.g. Batter, To serve) holding a list of items. Groups appear in the order they are written.
+<pre><code>ingredients:
+  Batter:
+    - name: rolled oats
+      amount: 150
+      unit: g
+  To serve:
+    - name: Greek yoghurt
+      amount: 150
+      unit: g</code></pre></li>
+</ul>
+<p>The two shapes cannot be mixed within one recipe. The build normalises both into the same internal list (each item gets a <code>group</code>, empty for plain lists), so templates, scaling and the future shopping list only deal with one format.</p>
+
+<h3>Ingredient item</h3>
+<p>Field order doesn't matter, but writing <code>name</code> first is the convention. Quotes are only needed when a value starts with a special YAML character or looks like a number or boolean that should stay text.</p>
+<table>
+  <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+  <tr><td><code>name</code></td><td>string</td><td class="req">yes</td><td>Ingredient name, e.g. "rolled oats".</td></tr>
+  <tr><td><code>amount</code></td><td>number</td><td>no</td><td>Quantity for <code>servings.amount</code> portions. Decimals allowed (0.5). Omit for "to taste" items.</td></tr>
+  <tr><td><code>unit</code></td><td>string</td><td>no</td><td>Metric only: g, kg, ml, l, tsp, tbsp, pinch, clove, handful, piece, can, ... Always written in the <strong>singular</strong>; words get a plural on display when the shown amount is more than 1 (½ clove, 1 clove, 1½ cloves, 2 handfuls), abbreviations never change (2 tbsp). Omit for countable items ("2 eggs").</td></tr>
+  <tr><td><code>note</code></td><td>string</td><td>no</td><td>Preparation or remark: "finely chopped", "to serve", "optional".</td></tr>
+  <tr><td><code>scale</code></td><td>boolean</td><td>no (default true)</td><td>Set to <code>false</code> for amounts that should not change with portions (a pinch of salt, 1 bay leaf).</td></tr>
+</table>
+<p>Unknown fields in an item (for example a typo like <code>ammount</code>) fail the build with the file name, the ingredient and the list of allowed fields.</p>
+
+<h3>Body (method)</h3>
+<ul>
+  <li>Free Markdown. Convention: a numbered list of steps, optionally followed by a <code>## Tips</code> section.</li>
+  <li>No headings needed for ingredients: those are rendered from the frontmatter.</li>
+  <li>A recipe whose method hasn't been written yet may say so in one line. It still builds; the build info lists it next to the recipes without photos, as a reminder.</li>
+</ul>
+
+<h3>Validation</h3>
+<p>The build <strong>fails with a clear message</strong> (file name + missing field) when a required field is missing or has the wrong type, or when a category or tag is not in the fixed list (see <a href="#taxonomy">Categories and tags</a> for the message format). This keeps broken recipes out of the published site.</p>
+
+<!-- ============================================================ -->
+<h2 id="taxonomy">4. Categories and tags</h2>
+<div class="decided">Decision: <strong>both categories and tags come from fixed lists</strong> in one definition file. Using a term that isn't listed stops the build with a descriptive error.</div>
+
+<h3>Roles</h3>
+<ul>
+  <li><strong>Categories</strong> say what kind of dish it is. Use one or two per recipe. Each category gets a listing page, a home page tile, an accent colour and a placeholder illustration.</li>
+  <li><strong>Tags</strong> describe properties of the dish, and a recipe can have several. They are organised in groups, and each group becomes one filter on the search page.</li>
+</ul>
+
+<h3>Definition file</h3>
+<p><code>src/_data/taxonomy.js</code> is the single source of truth. Eleventy exposes it to all templates as <code>taxonomy</code>, and the recipe validation reads the same file.</p>
+<pre><code>// Single source of truth for categories and tags.
+// Recipes may only use names listed here; the build explains how to add new ones.
+export default {
+  // Named colours, reusable below. Terms may also use a hex value directly.
+  palette: {
+    leaf: "#2F9E6E", herb: "#5E8C3A", avocado: "#8DB63C", teal: "#2BA3A0",
+    sky: "#4AA8D8", plum: "#8E6CC9", berry: "#E8546B", tomato: "#E4583A",
+    carrot: "#F28C38", citrus: "#F6B73C", oat: "#C9A46A",
+  },
+
+  categories: [
+    { name: "Breakfast",        color: "citrus",  illustration: "breakfast.svg" },
+    { name: "Lunch",            color: "avocado", illustration: "lunch.svg" },
+    { name: "Main",             color: "tomato",  illustration: "main.svg" },
+    { name: "Soup",             color: "carrot",  illustration: "soup.svg" },
+    { name: "Salad",            color: "leaf",    illustration: "salad.svg" },
+    { name: "Side",             color: "teal",    illustration: "side.svg" },
+    { name: "Snack",            color: "plum",    illustration: "snack.svg" },
+    { name: "Baking",           color: "oat",     illustration: "baking.svg" },
+    { name: "Dessert",          color: "berry",   illustration: "dessert.svg" },
+    { name: "Drink",            color: "sky",     illustration: "drink.svg" },
+    { name: "Sauce &amp; Dressing", color: "herb",    illustration: "sauce.svg",
+      slug: "sauce-dressing" },
+  ],
+
+  tagGroups: [
+    { name: "Diet", color: "leaf", tags: [
+      { name: "vegetarian" }, { name: "vegan" }, { name: "gluten-free" },
+      { name: "dairy-free" }, { name: "high-protein" },
+    ]},
+    { name: "Effort", color: "sky", tags: [
+      { name: "quick", description: "Ready in under 30 minutes" },
+      { name: "one-pot" }, { name: "make-ahead" },
+      { name: "freezer-friendly" }, { name: "lunchbox" },
+    ]},
+    { name: "Main ingredient", color: "carrot", tags: [
+      { name: "legumes" }, { name: "fish" }, { name: "chicken" },
+      { name: "tofu" }, { name: "whole grains" }, { name: "eggs" },
+    ]},
+    { name: "Season", color: "teal", tags: [
+      { name: "spring", color: "avocado" }, { name: "summer", color: "citrus" },
+      { name: "autumn", color: "carrot" },  { name: "winter", color: "sky" },
+    ]},
+    { name: "Audience", color: "berry", tags: [
+      { name: "kid-friendly" },
+    ]},
+  ],
+};</code></pre>
+
+<h3>Term fields</h3>
+<table>
+  <tr><th>Field</th><th>Applies to</th><th>Required</th><th>Description</th></tr>
+  <tr><td><code>name</code></td><td>category, tag, tag group</td><td class="req">yes</td><td>Display name. This is also what recipes write in their frontmatter.</td></tr>
+  <tr><td><code>slug</code></td><td>category, tag</td><td>no</td><td>URL and CSS-safe identifier. Derived from <code>name</code> with Eleventy's <code>slugify</code> when omitted.</td></tr>
+  <tr><td><code>color</code></td><td>category, tag, tag group</td><td>category: yes, tag: no</td><td>Palette name or hex value. A tag without its own colour uses its group's colour.</td></tr>
+  <tr><td><code>illustration</code></td><td>category</td><td>yes</td><td>Placeholder SVG in <code>src/assets/illustrations/</code>, used when a recipe has no photo.</td></tr>
+  <tr><td><code>description</code></td><td>category, tag</td><td>no</td><td>Short explanation, shown as a tooltip and on the category page.</td></tr>
+</table>
+<p>List order is display order: category tiles and filter chips follow the order in the file.</p>
+
+<h3>Colours in the layout</h3>
+<ul>
+  <li>From each term's <code>color</code> the build derives three shades: <strong>accent</strong> (the colour itself), <strong>tint</strong> (a very light mix with white, used for badge backgrounds and tile surfaces) and <strong>ink</strong> (a dark mix, used for badge text). This keeps badges readable without defining three colours per term.</li>
+  <li>Every derived ink/tint pair is checked for WCAG AA contrast (4.5:1) at build time. A failing pair gives a warning that names the term and suggests a darker colour.</li>
+  <li>Eleventy generates <code>taxonomy.css</code> with one class per term, which sets custom properties:
+<pre><code>.cat-breakfast { --accent: #F6B73C; --tint: #FEF6E4; --ink: #6B4A07; }
+.tag-vegan     { --accent: #2F9E6E; --tint: #E3F5EC; --ink: #16513A; }</code></pre>
+    Two more shades are derived for filled buttons and category chips: <strong>solid</strong> (the accent darkened just enough for white text at AA, or lightened for dark text in dark mode) and <strong>on-solid</strong> (that text colour). Every value is a CSS <code>light-dark()</code> pair, so one class covers both themes.
+    Components only use <code>var(--accent)</code>, <code>var(--tint)</code>, <code>var(--ink)</code>, <code>var(--solid)</code> and <code>var(--on-solid)</code>. A badge, a card's top border, a category tile or the recipe header stripe gets its colour just by adding the term class.</li>
+  <li>The recipe page uses its first category's class, so the accent colour runs through the whole page (header stripe, portion counter, "Add to planner" button).</li>
+</ul>
+
+<h3>Matching rules</h3>
+<ul>
+  <li>Matching is case-insensitive and ignores surrounding spaces, so <code>Vegan</code> and <code>vegan</code> are the same term. Pages always show the name as written in the definition file.</li>
+  <li>Anything else must match exactly (no automatic plurals or synonyms), but the error suggests the closest match.</li>
+  <li>The same term listed twice in a recipe gives an error. So does a duplicate name or slug in the definition file.</li>
+</ul>
+
+<h3>Error message</h3>
+<p>Validation runs once over <strong>all</strong> recipes at the start of the build. It collects every problem, prints them grouped per file and then exits with a non-zero code, so a single build shows all mistakes. During <code>npm run serve</code> the errors are printed and the dev server keeps watching, so fixing the file triggers a rebuild.</p>
+<p>Each unknown term produces a message like this:</p>
+<pre><code>✖ Unknown category in src/recipes/oat-banana-waffles.md
+
+  Field:   categories
+  Value:   "Breakfst"
+  Did you mean "Breakfast"?
+
+  Supported categories (11):
+    Breakfast, Lunch, Main, Soup, Salad, Side, Snack, Baking,
+    Dessert, Drink, Sauce &amp; Dressing
+
+  Is "Breakfst" truly a new category? Add it to src/_data/taxonomy.js
+  under "categories", for example:
+
+    { name: "Breakfst", color: "leaf", illustration: "plate.svg" },
+
+  color:        one of leaf, herb, avocado, teal, sky, plum, berry,
+                tomato, carrot, citrus, oat, or a hex value like "#2F9E6E"
+  illustration: an SVG in src/assets/illustrations/ (plate.svg is the
+                generic placeholder)
+
+  Then rebuild. A new category also gets its own page at
+  /categories/breakfst/. See SPEC.html, "Categories and tags".</code></pre>
+
+<pre><code>✖ Unknown tag in src/recipes/lentil-soup.md
+
+  Field:   tags
+  Value:   "legume"
+  Did you mean "legumes"?
+
+  Supported tags (21), by group:
+    Diet             vegetarian, vegan, gluten-free, dairy-free, high-protein
+    Effort           quick, one-pot, make-ahead, freezer-friendly, lunchbox
+    Main ingredient  legumes, fish, chicken, tofu, whole grains, eggs
+    Season           spring, summer, autumn, winter
+    Audience         kid-friendly
+
+  Is "legume" truly a new tag? Add it to src/_data/taxonomy.js inside the
+  "tags" list of the group it belongs to, for example:
+
+    { name: "Main ingredient", color: "carrot", tags: [
+      ...
+      { name: "legume" },
+    ]},
+
+  The tag uses its group's colour unless you add color: "...".
+  For a new group, add { name: "...", color: "...", tags: [...] } to
+  "tagGroups"; it will appear as a new filter on the search page.
+  Then rebuild. See SPEC.html, "Categories and tags".</code></pre>
+<p>The "Did you mean" line only appears when a term is close enough (edit distance of 2 or less, or one term contains the other). The error output uses colour in the terminal when available.</p>
+
+<!-- ============================================================ -->
+<h2 id="example">5. Example recipe</h2>
+<p><code>src/recipes/oat-banana-waffles.md</code></p>
+<pre><code>---
+title: Oat &amp; Banana Waffles
+description: Naturally sweet waffles with oats, banana and a hint of cinnamon.
+date: 2026-09-26
+categories: [Breakfast, Baking]
+tags: [vegetarian, freezer-friendly, kid-friendly]
+image: oat-banana-waffles.jpg
+servings:
+  amount: 7
+  unit: waffles
+  unitSingular: waffle
+  note: Might vary depending on the size of your waffle iron.
+ingredients:
+  Batter:
+    - name: rolled oats
+      amount: 150
+      unit: g
+      note: blended into flour
+    - name: ripe bananas
+      amount: 2
+    - name: eggs
+      amount: 2
+    - name: milk
+      amount: 250
+      unit: ml
+      note: or a plant based drink
+    - name: baking powder
+      amount: 1
+      unit: tsp
+    - name: ground cinnamon
+      amount: 1
+      unit: tsp
+    - name: salt
+      amount: 1
+      unit: pinch
+      scale: false
+  To serve:
+    - name: Greek yoghurt
+      amount: 150
+      unit: g
+    - name: fresh berries
+      amount: 100
+      unit: g
+    - name: maple syrup
+      note: optional, to taste
+---
+
+1. Blend the oats into a fine flour.
+2. Add the bananas, eggs, milk, baking powder, cinnamon and salt and blend until smooth.
+3. Let the batter rest for 10 minutes so the oats can absorb the liquid.
+4. Preheat and lightly grease the waffle iron.
+5. Bake each waffle for 4 to 5 minutes until golden and crisp.
+6. Serve with yoghurt, berries and a drizzle of maple syrup.
+
+## Tips
+
+- Waffles freeze well; reheat them in the toaster.
+</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="scaling">6. Portion scaling</h2>
+<ul>
+  <li>The recipe page shows a spin counter: <strong>[ − ] 7 waffles [ + ]</strong>, with the <code>servings.note</code> as a small byline underneath.</li>
+  <li>Input is an integer, minimum 1, maximum 99. The number can also be typed. Unit label switches between singular and plural.</li>
+  <li>On change, every ingredient with an <code>amount</code> and <code>scale</code> not false is recalculated: <code>new = amount × chosen / servings.amount</code>. Updates happen instantly without reloading.</li>
+  <li>The server rendered page shows the original amounts, so the recipe is readable without JavaScript. The script enhances it (progressive enhancement). Base amounts are stored in <code>data-</code> attributes.</li>
+  <li>A "reset" link returns to the original number when it differs.</li>
+  <li>The chosen number is reflected in the URL (<code>?portions=4</code>) so a scaled recipe can be shared or bookmarked.</li>
+</ul>
+<h3>Number formatting</h3>
+<table>
+  <tr><th>Case</th><th>Rule</th><th>Example</th></tr>
+  <tr><td>g, ml at 100 or more</td><td>round to nearest 5</td><td>214 g → 215 g</td></tr>
+  <tr><td>g, ml below 100</td><td>round to whole number</td><td>42.9 g → 43 g</td></tr>
+  <tr><td>g, ml reaching 1000 or more</td><td>switch to kg / l, max 2 decimals, trailing zeros removed</td><td>1250 g → 1.25 kg, 2000 ml → 2 l</td></tr>
+  <tr><td>kg, l dropping below 1</td><td>switch to g / ml and apply the g/ml rules</td><td>0.25 kg → 250 g</td></tr>
+  <tr><td>Units without fixed size (tsp, tbsp, pieces, no unit)</td><td>round to nearest ¼ and show as fraction</td><td>1.33 tsp → 1¼ tsp, 2.5 eggs → 2½ eggs</td></tr>
+  <tr><td>Result would be 0</td><td>show the smallest step instead</td><td>¼ tsp</td></tr>
+</table>
+<p>Unit switching: amounts in g/kg and ml/l are converted to the base unit (g, ml) after scaling, rounded, and then shown in kg or l when they reach 1000. This works in both directions, so a recipe written in kg shows grams when scaled down. Other units (tsp, tbsp, pinch, pieces, ...) are never converted. The same logic will be reused to add up amounts in the future shopping list.</p>
+
+<!-- ============================================================ -->
+<h2 id="pages">7. Pages and navigation</h2>
+<table>
+  <tr><th>Page</th><th>URL</th><th>Content</th></tr>
+  <tr><td>Home</td><td><code>/</code></td><td>Hero with search box, category tiles, recently added recipes, link to this week's planner.</td></tr>
+  <tr><td>Recipe</td><td><code>/recipes/&lt;slug&gt;/</code></td><td>Header image, title, category and tag chips, portion counter, ingredient list (grouped), method, "Add to planner" button.</td></tr>
+  <tr><td>All recipes</td><td><code>/recipes/</code></td><td>Card grid of all recipes, alphabetical.</td></tr>
+  <tr><td>Category</td><td><code>/categories/&lt;slug&gt;/</code></td><td>Card grid for one category (generated with Eleventy pagination). Every category gets a page; one without recipes shows a friendly empty state.</td></tr>
+  <tr><td>Search</td><td><code>/search/</code></td><td>Pagefind search with category and tag filters. Accepts <code>?q=</code>.</td></tr>
+  <tr><td>Planner</td><td><code>/planner/</code></td><td>Weekly dinner planner.</td></tr>
+  <tr><td>404</td><td><code>/404.html</code></td><td>Friendly not found page with search (GitHub Pages picks this up automatically).</td></tr>
+</table>
+<p><strong>Navigation:</strong> on mobile a fixed bottom bar with Home, Search, Planner (thumb reachable). From tablet width upward the same links move to a top header.</p>
+<p><strong>Recipe card:</strong> thumbnail (4:3), title, first category, up to two tag chips. On phones, listing pages (all recipes, category pages, search results) show the card as a compact row (thumbnail left, text right) so long lists stay scannable; from 640px up they are a grid. "Recently added" on the home page is a sideways swipeable row on phones.</p>
+<p><strong>Home page details:</strong> category tiles are shown only for categories that have recipes. A "This week" card shows tonight's dinner (or how many dinners are planned) with a dot per day, read from the planner in the browser.</p>
+<p><strong>Recipe page details:</strong> on phones the photo is full width and the content slides over it as a rounded sheet; on desktop the title sits next to the photo and the ingredients (with portion counter) stay visible beside the method. Below the "Add to planner" button a note says when the recipe is planned ("Planned for Tue 29 Sept · View planner").</p>
+
+<!-- ============================================================ -->
+<h2 id="search">8. Search</h2>
+<div class="decided">Decision: <strong>Pagefind</strong> (<code>pagefind</code> npm package, v1.x).</div>
+<ul>
+  <li>Runs after Eleventy: <code>eleventy &amp;&amp; pagefind --site docs</code>. The index is written to <code>docs/pagefind/</code> and committed together with the site.</li>
+  <li>Only recipe pages are indexed: the recipe <code>&lt;article&gt;</code> gets <code>data-pagefind-body</code>. Title, ingredients and method are all searchable, so searching "lentils" finds recipes that use lentils.</li>
+  <li>Filters: each category rendered with <code>data-pagefind-filter="category"</code>, each tag with its group as the filter name (e.g. <code>data-pagefind-filter="Diet"</code>), so every tag group shows up as its own filter.</li>
+  <li>Metadata for result cards: <code>data-pagefind-meta="image"</code>, plus the title and description.</li>
+  <li>UI: <strong>our own UI on the Pagefind JavaScript API</strong> (<code>search.js</code>), not the Component UI. The Component UI was tried first but is 175 KB of script and can't render results as our recipe cards; the planner's dish picker needs the JavaScript API anyway. Results are rendered from a small recipe list embedded in the page (title, thumbnail, category, tags, servings), with Pagefind's excerpt (matched words highlighted) under the title. The home page search box submits to <code>/search/?q=…</code>.</li>
+  <li>Filters: on phones a "Filters" button (with a count badge) opens a bottom sheet with one chip group per filter and a "Show N recipes" button; on desktop the same groups form a sidebar. Active filters show as removable chips above the results. Within a group values are OR-ed, across groups AND-ed. Counts are real facet counts (each group counted without its own selection) and values that would give no results are hidden.</li>
+  <li>All search state is in the URL (<code>?q=lentils&amp;diet=vegan&amp;category=soup</code>, one parameter per group slug), so tag chips on recipe pages link straight to a filtered search.</li>
+  <li>An empty search lists all recipes. If the index can't be loaded, a notice appears and titles and descriptions are searched in the browser instead.</li>
+  <li>The planner's dish picker reuses the same index through the Pagefind JavaScript API (<code>pagefind.search()</code>), so there is one search engine for the whole site.</li>
+  <li>Search does not work with <code>npm run serve</code> alone until the index has been built once; a <code>serve</code> script that builds the index first is part of the setup.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="planner">9. Weekly planner</h2>
+<div class="decided">Decisions: <strong>one dinner per day</strong>, <strong>real calendar weeks</strong> starting on Monday, stored in <code>localStorage</code>.</div>
+
+<h3>Planner page</h3>
+<ul>
+  <li>Shows one week (Mon to Sun) with dates. Arrows to go to previous and next week, and a "This week" button. Today is highlighted.</li>
+  <li>Mobile and tablet: vertical list of 7 day rows. From 1024px: 7 column grid.</li>
+  <li>Filled day: thumbnail, dish name (links to the recipe with <code>?portions=</code> set), portion count, remove button.</li>
+  <li>Empty day: "+ Add dinner" opens the dish picker (search field with live Pagefind results).</li>
+</ul>
+
+<h3>Adding a dish</h3>
+<p>From a recipe page ("Add to planner") or from the planner's dish picker, a dialog asks:</p>
+<ol>
+  <li><strong>Portions</strong>: spin counter, prefilled with the number currently chosen on the recipe page (or the recipe's default).</li>
+  <li><strong>Days</strong>: the 7 days of the selected week as toggle chips, with week navigation inside the dialog. Multiple days can be selected, because a dish is often eaten on several (usually consecutive) days.</li>
+  <li>Days that already have a dish show its name; selecting them asks for confirmation to replace.</li>
+</ol>
+<p>The portions are stored per day entry, so leftovers on day two can have a different count.</p>
+
+<h3>Interaction details (phone first)</h3>
+<ul>
+  <li><strong>One sheet for adding:</strong> on phones every dialog is a bottom sheet (drag the handle down, tap outside or press Escape to close); from 640px it is a centred dialog. The planner's "+ Add dinner" opens the <em>dish picker</em> view ("Dinner for Tue 29 Sept"): search field, "Recently planned" dishes, then all recipes A to Z. Typing searches live with Pagefind. On phones the field is not focused automatically, so the keyboard doesn't hide the list.</li>
+  <li>Picking a dish moves to the <em>plan</em> view in the same sheet (with a back arrow): portions stepper (defaults to the recipe's servings) and the days of the week, with the tapped day already selected. So planning one dinner is three taps: + Add dinner, the dish, Add.</li>
+  <li>Days are a list of toggle rows (not small chips) so each row can show the date and what is planned: "Free", the current dish, or "Already planned" when it is this dish. Tapping a day that has another dish shows an inline confirmation under it ("Replace Quick Bread on Tue 29 Sept?" Keep it / Replace); a confirmed day is marked "Replaces …". Selections survive week navigation inside the sheet.</li>
+  <li>The save button says what happens: "Pick one or more days" (disabled), "Add to Tue 29 Sept", "Add to 3 days".</li>
+  <li>Every change (add, replace, remove) shows a toast with <strong>Undo</strong> instead of asking for confirmation first.</li>
+  <li>Filled day row: thumbnail and title link to the recipe with <code>?portions=</code>; a portions chip ("4 servings") opens a small day sheet with a portions stepper (saved immediately), "Change dish" and "Remove"; the × button removes directly (with Undo).</li>
+  <li>Week navigation: arrows in a sticky week bar ("This week", "Next week", "In 3 weeks"… with the date range), swipe sideways over the days, or the arrow keys on a keyboard. A "This week" button appears when another week is shown. The shown week is kept in the URL (<code>?week=2026-09-28</code>). Newly added days briefly highlight.</li>
+  <li>Steppers: tap − / +, hold to repeat faster, or type the number. 48px round buttons.</li>
+  <li>Changes made in another tab show up immediately (the <code>storage</code> event).</li>
+</ul>
+
+<h3>Storage format</h3>
+<p>Key <code>recipeBook.planner.v1</code>. Entries are keyed by ISO date. Title and image are copied in so the planner renders without loading recipe pages. The stored image is the smallest generated photo (400px WebP) or, without a photo, the placeholder SVG.</p>
+<pre><code>{
+  "version": 1,
+  "days": {
+    "2026-09-28": { "slug": "oat-banana-waffles", "title": "Oat &amp; Banana Waffles",
+                    "image": "/cookbook/assets/images/recipes/oat-banana-waffles.jpg", "portions": 4 },
+    "2026-09-29": { "slug": "oat-banana-waffles", "title": "Oat &amp; Banana Waffles",
+                    "image": "/cookbook/assets/images/recipes/oat-banana-waffles.jpg", "portions": 2 }
+  }
+}</code></pre>
+<ul>
+  <li>All reads and writes go through one small module that catches storage errors (private browsing, storage full) and shows a notice instead of breaking the page.</li>
+  <li>The <code>version</code> field allows migrating the format later.</li>
+  <li><strong>History:</strong> the planner keeps the current week, all future weeks, and the <strong>8 previous weeks</strong>. On every load, entries dated before the Monday 8 weeks before the current week are removed. Week navigation stops at the oldest kept week.</li>
+  <li>If a recipe was renamed or removed, the entry still shows its stored title; the link leads to the 404 page with search.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="design">10. Design and layout</h2>
+<h3>Principles</h3>
+<ul>
+  <li><strong>Mobile first</strong>: base CSS targets ~360px wide phones; breakpoints at 640px (tablet) and 1024px (desktop). No horizontal scrolling of the page (the "Recently added" row on phones scrolls sideways on its own).</li>
+  <li><strong>Bright and fresh</strong>: lots of white space, warm off white background, leafy green as the main colour, citrus and berry accents taken from fruit and vegetables.</li>
+  <li>Large touch targets (min 44px), readable 17px base text for use while cooking.</li>
+  <li>Rounded cards (16px radius), soft shadows, generous photos.</li>
+  <li>Accessible: WCAG AA contrast, visible focus states, respects <code>prefers-reduced-motion</code>.</li>
+</ul>
+
+<h3>Colour palette (proposal)</h3>
+<div class="swatches">
+  <div class="swatch"><span style="background:#2f9e6e"></span><div><strong>Leaf</strong><br>#2F9E6E primary</div></div>
+  <div class="swatch"><span style="background:#1f6f4c"></span><div><strong>Leaf dark</strong><br>#1F6F4C text on light</div></div>
+  <div class="swatch"><span style="background:#e3f5ec"></span><div><strong>Mint</strong><br>#E3F5EC surfaces</div></div>
+  <div class="swatch"><span style="background:#f6b73c"></span><div><strong>Citrus</strong><br>#F6B73C highlight</div></div>
+  <div class="swatch"><span style="background:#e8546b"></span><div><strong>Berry</strong><br>#E8546B accent</div></div>
+  <div class="swatch"><span style="background:#4aa8d8"></span><div><strong>Sky</strong><br>#4AA8D8 info</div></div>
+  <div class="swatch"><span style="background:#fbfaf5"></span><div><strong>Cream</strong><br>#FBFAF5 background</div></div>
+  <div class="swatch"><span style="background:#1f2a24"></span><div><strong>Ink</strong><br>#1F2A24 text</div></div>
+</div>
+<p>These are the core interface colours. Categories and tags get their own accent colours from an extended palette in the definition file, see <a href="#taxonomy">Categories and tags</a>.</p>
+
+<h3>Light and dark mode</h3>
+<ul>
+  <li>Three settings: <strong>System</strong> (default, follows the device through <code>prefers-color-scheme</code>), <strong>Light</strong> and <strong>Dark</strong>.</li>
+  <li><strong>Subtle toggle:</strong> not in the header or bottom bar. It sits in the site footer as a small, low contrast control ("Appearance: System · Light · Dark", a compact segmented control with a sun/moon icon). It is reachable on every page but never draws attention.</li>
+  <li>The choice is stored in <code>localStorage</code> under <code>recipeBook.theme</code> (<code>"system"</code>, <code>"light"</code> or <code>"dark"</code>). If storage is unavailable, the site follows the system setting.</li>
+  <li>A tiny inline script in <code>&lt;head&gt;</code> reads the setting and sets <code>data-theme</code> on <code>&lt;html&gt;</code> before the page renders, so there is no flash of the wrong theme. It also adds a <code>js</code> class, so controls that need JavaScript (steppers, "Add to planner") are hidden without it.</li>
+  <li>Colours are CSS <code>light-dark()</code> pairs; <code>data-theme</code> only sets <code>color-scheme</code> (<code>light dark</code> for System), so every colour is defined once.</li>
+  <li>All colours are CSS custom properties with a dark set, for example:
+    <table>
+      <tr><th>Token</th><th>Light</th><th>Dark</th></tr>
+      <tr><td>background</td><td>#FBFAF5 cream</td><td>#121814 deep green black</td></tr>
+      <tr><td>surface (cards)</td><td>#FFFFFF</td><td>#1B231E</td></tr>
+      <tr><td>text</td><td>#1F2A24 ink</td><td>#E6EEE8</td></tr>
+      <tr><td>primary</td><td>#2F9E6E leaf</td><td>#4CC08C lighter leaf</td></tr>
+      <tr><td>muted text</td><td>#5D6B63</td><td>#9AABA1</td></tr>
+    </table>
+  </li>
+  <li>Category and tag colours: the build generates a dark variant of each term's tint and ink (tint = accent mixed into the dark surface, ink = accent mixed with white) and checks AA contrast for both themes.</li>
+  <li>Illustrations keep their own light backgrounds (they sit in rounded frames, like pictures). In dark mode they get a slight dim (<code>filter: brightness(.9)</code>) so they don't glare. Dedicated dark artwork is in the backlog if this looks off.</li>
+</ul>
+
+<h3>Typography</h3>
+<div class="decided">Decision: <strong>Nunito</strong> for everything (rounded, friendly, one family).</div>
+<ul>
+  <li>Weights: 400 (body), 700 (subheadings, ingredient amounts, buttons), 800 (page titles). Headings get slightly tighter letter spacing (<code>-0.01em</code>).</li>
+  <li>Ingredient amounts use tabular numbers (<code>font-variant-numeric: tabular-nums</code>) so they line up and don't jump while the portion counter changes.</li>
+  <li>Self hosted with the <code>@fontsource/nunito</code> npm package (WOFF2, <code>font-display: swap</code>), copied into the build: no requests to Google, works offline.</li>
+  <li>Subsets: <strong>latin and latin-ext</strong>, because recipe names contain characters like ę, ł, ż (Kruche ciasto na tartę).</li>
+  <li>Fallback stack: <code>Nunito, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif</code>.</li>
+  <li>Base size 17px on phones, line height 1.6 for body text, max line length about 70 characters on wide screens.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="assets">11. Images and artwork</h2>
+<ul>
+  <li><strong>No photos exist yet</strong>; every recipe starts with its category placeholder. Photos are added over time.</li>
+  <li>One folder per recipe: <code>src/assets/images/recipes/&lt;slug&gt;/</code>. The main photo is named by <code>image</code>, extra photos by <code>gallery</code>. Example:
+<pre><code>image: sponge-cake.jpg
+imagePosition: center 40%
+gallery:
+  - file: whisked-whites.jpg
+    caption: Egg whites whisked to stiff peaks
+  - file: slice.jpg</code></pre></li>
+  <li>The main photo is used as header (16:9 crop) and card thumbnail (4:3 crop) with CSS <code>object-fit: cover</code> and <code>imagePosition</code> as <code>object-position</code>. Phone photos in any orientation work.</li>
+  <li><strong>Gallery:</strong> shown as a row of small square thumbnails below the method. Tapping one opens a full screen viewer (native <code>&lt;dialog&gt;</code> with CSS scroll snap, swipe or arrow keys to move, caption underneath). No gallery library. Without JavaScript the thumbnails link to the full image.</li>
+  <li>Responsive sizes (WebP, widths 400 / 800 / 1600) are generated at build time with <code>@11ty/eleventy-img</code>, lazy loaded except the header image.</li>
+  <li>Validation: a missing photo file fails the build with the recipe, the field and the folder it looked in.</li>
+</ul>
+
+<h3>Photo originals</h3>
+<ul>
+  <li>Originals are committed in the repository, but <strong>pre-shrunk</strong> so the repository stays well under the GitHub Pages 1 GB limit.</li>
+  <li><code>scripts/shrink_photos.py</code> (Python, Pillow) processes every photo in <code>src/assets/images/recipes/</code>: longest side capped at 2000 px, JPEG quality 85 (typically 300 to 500 KB), rotation from EXIF applied, and <strong>all EXIF metadata removed</strong> (including GPS location from phone photos). Already shrunk files are left alone, so it is safe to run repeatedly.</li>
+  <li>Workflow: drop phone photos in the recipe folder, run <code>npm run photos</code> (calls the script), commit.</li>
+</ul>
+
+<h3>Placeholder artwork for recipes without a photo</h3>
+<p>Every recipe shows an image on its card and page header. When a recipe has no <code>image</code> yet, it shows the illustration of its <strong>first category</strong>. If that category has no illustration file, it falls back to <code>plate.svg</code>. The fallback is resolved at build time, so templates always receive an image path.</p>
+<p><strong>Deliberately not photographic.</strong> Placeholders are flat vector illustrations, so they can never be mistaken for a real photo of the dish:</p>
+<ul>
+  <li>Flat shapes only: no gradients, textures, realistic shading or drop shadows (only a soft flat ellipse under the object).</li>
+  <li>Background is the category's light tint with a large soft circle in a mid shade, a few scattered dots and two small corner leaves. This frame is the same on every placeholder, so they read as one set.</li>
+  <li>Colours come only from the taxonomy palette (the category colour plus fixed food colours like berry, citrus and leaf).</li>
+  <li>Canvas is 400 × 300 (4:3, card thumbnail). The subject stays inside the central 16:9 band, so the page header crop keeps it intact.</li>
+  <li>SVG with a <code>&lt;title&gt;</code> and <code>aria-label</code>, a few KB each, crisp at every size.</li>
+</ul>
+<p>On the recipe page, a placeholder header also gets a small "No photo yet" chip. The build prints (as info, not an error) a list of recipes that still need a photo.</p>
+
+<table>
+  <tr><th>Category</th><th>File</th><th>Subject</th></tr>
+  <tr><td>Breakfast</td><td><code>breakfast.svg</code></td><td>Porridge bowl with berries and banana, rising sun</td></tr>
+  <tr><td>Lunch</td><td><code>lunch.svg</code></td><td>Layered sandwich</td></tr>
+  <tr><td>Main</td><td><code>main.svg</code></td><td>Plate with fish, greens and lemon, fork and knife</td></tr>
+  <tr><td>Soup</td><td><code>soup.svg</code></td><td>Steaming bowl with herbs and spoon</td></tr>
+  <tr><td>Salad</td><td><code>salad.svg</code></td><td>Bowl of leaves, tomatoes and cucumber</td></tr>
+  <tr><td>Side</td><td><code>side.svg</code></td><td>Vegetable sticks in a cup with a dip</td></tr>
+  <tr><td>Snack</td><td><code>snack.svg</code></td><td>Apple with almonds</td></tr>
+  <tr><td>Baking</td><td><code>baking.svg</code></td><td>Loaf of bread and wheat ear</td></tr>
+  <tr><td>Dessert</td><td><code>dessert.svg</code></td><td>Yoghurt parfait with a strawberry</td></tr>
+  <tr><td>Drink</td><td><code>drink.svg</code></td><td>Glass with ice, lemon slice and straw</td></tr>
+  <tr><td>Sauce &amp; Dressing</td><td><code>sauce.svg</code></td><td>Jar of sauce with an herb sprig</td></tr>
+  <tr><td>(fallback)</td><td><code>plate.svg</code></td><td>Empty plate with a leaf, fork and knife</td></tr>
+</table>
+<p>The files live in <code>src/assets/illustrations/</code> and are generated by <code>scripts/make_artwork.py</code> (plain Python, no dependencies). To change a colour or a drawing, edit the script and run <code>python3 scripts/make_artwork.py src/assets/illustrations</code>. A new category needs a new drawing function in the script plus the <code>illustration</code> file name in <code>taxonomy.js</code>.</p>
+
+<h3>Site artwork</h3>
+<p>Same flat style and palette as the placeholders, generated by the same script into <code>src/assets/illustrations/</code>. All digits and shapes are drawn as paths, so nothing depends on fonts being available inside an SVG.</p>
+<table>
+  <tr><th>Asset</th><th>File</th><th>Design</th><th>Where it is used</th></tr>
+  <tr><td>Logo</td><td><code>logo.svg</code> (64 × 64, transparent)</td><td>Leaf green bowl with two leaves (herb, avocado) sprouting from it and one berry.</td><td>Header, left of the site name. The site name itself is HTML text in the site font (Nunito, extra bold, ink colour), so it stays sharp, translatable and easy to rename.</td></tr>
+  <tr><td>Favicon</td><td><code>favicon.svg</code> (64 × 64)</td><td>Simplified logo on a solid leaf green rounded tile: white bowl, citrus and light green leaf. Fewer details so it reads at 16 px.</td><td><code>&lt;link rel="icon" type="image/svg+xml"&gt;</code>. At build time <code>@11ty/eleventy-img</code> renders it to <code>favicon-32.png</code> (fallback) and <code>apple-touch-icon.png</code> (180 × 180, iOS home screen).</td></tr>
+  <tr><td>Home page hero</td><td><code>hero.svg</code> (800 × 400, 2:1)</td><td>Mint background with three soft circles; a large salad bowl in the centre, an apple with almonds on the left, a drink with lemon on the right, a carrot, lemon half and berries in front.</td><td>Top of the home page, full width with rounded corners, search box overlapping its bottom edge. On phones it may be cropped to about 16:9 with <code>object-fit: cover</code>; the three main items stay visible.</td></tr>
+  <tr><td>Empty planner</td><td><code>empty-planner.svg</code> (400 × 300)</td><td>Calendar page with a sky blue header, one day showing a small plate, and a green "+" button.</td><td>Planner page when the shown week has no dinners, with the text "Nothing planned this week yet" and a button to browse recipes. Individual empty days keep the simple "+ Add dinner" button.</td></tr>
+  <tr><td>No search results</td><td><code>no-results.svg</code> (400 × 300)</td><td>Magnifying glass over an empty bowl with a single leaf.</td><td>Search page and planner dish picker when nothing matches, with "No recipes found" and a hint to try fewer words or clear filters.</td></tr>
+  <tr><td>404</td><td><code>404.svg</code> (400 × 300)</td><td>The number 404 in leaf green, with an empty plate as the zero; a tomato and a pea have rolled off the plate.</td><td>404 page, with "This page is off the menu", a search box and a link to all recipes.</td></tr>
+</table>
+<p>Illustrations used as decoration next to a text that says the same thing (empty states, 404) get an empty <code>alt=""</code>; the hero and logo get a short alt text.</p>
+
+<!-- ============================================================ -->
+<h2 id="structure">12. Project structure</h2>
+<pre><code>recipe_book/
+├── .devcontainer/          dev container (Python + Node + Claude Code)
+├── src/
+│   ├── _data/
+│   │   ├── site.js         site name, base url, description
+│   │   ├── taxonomy.js     fixed categories, tag groups, tags and their colours
+│   │   └── eleventyComputed.js  default social preview image
+│   ├── _includes/
+│   │   ├── layouts/        base.njk, recipe.njk
+│   │   └── partials/       card, nav, footer, portion-counter, planner-dialog,
+│   │                       recipe-index (recipe list for scripts), filter-index
+│   ├── recipes/
+│   │   ├── recipes.11tydata.js   layout, fixed permalink, computed recipe data and image markup
+│   │   └── *.md            one file per recipe
+│   ├── assets/
+│   │   ├── css/            main.css, taxonomy.11ty.js (generates taxonomy.css)
+│   │   ├── js/             quantity.js (shared with the build), scaler.js, recipe-page.js,
+│   │   │                   planner.js, planner-dialog.js, planner-storage.js, dates.js,
+│   │   │                   search.js, pagefind-client.js, home.js, gallery.js, theme.js,
+│   │   │                   ui.js (sheets, stepper, toasts), icons.js (shared with the build)
+│   │   ├── images/recipes/ one folder per recipe with its photos
+│   │   └── illustrations/  all generated SVG artwork
+│   ├── index.njk  all-recipes.njk  search.njk  planner.njk  categories.njk  404.njk
+│   └── .nojekyll
+├── docs/                   build output (committed, served by GitHub Pages)
+├── scripts/
+│   ├── shrink_photos.py    caps photo size and strips EXIF before committing
+│   └── make_artwork.py     generates all SVG artwork (placeholders, logo, favicon, hero, empty states, 404)
+├── lib/
+│   ├── validate-recipes.js  frontmatter and taxonomy validation, error messages
+│   ├── taxonomy.js          slugs, derived colours, lookups, contrast warnings
+│   ├── colors.js            colour mixing and WCAG contrast
+│   ├── recipes.js           ingredient normalising, placeholders, method detection
+│   ├── images.js            eleventy-img: responsive photos, social images, favicons
+│   ├── icons.js, paths.js   shared icon set, path prefix helper
+├── eleventy.config.js
+├── package.json
+├── SPEC.html               this document
+└── CLAUDE.md</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="build">13. Build and deploy</h2>
+<table>
+  <tr><th>Command</th><th>Does</th></tr>
+  <tr><td><code>npm run build</code></td><td>Clean <code>docs/</code>, run Eleventy, run Pagefind on <code>docs/</code>.</td></tr>
+  <tr><td><code>npm run photos</code></td><td>Shrink new photos and strip their metadata (<code>scripts/shrink_photos.py</code>).</td></tr>
+  <tr><td><code>npm run serve</code></td><td>Build the search index once, then Eleventy dev server with live reload on port 8080.</td></tr>
+</table>
+<ul>
+  <li>Deploy: commit the rebuilt <code>docs/</code> and push to <code>main</code>. GitHub Pages is set to "Deploy from a branch", <code>main</code>, <code>/docs</code>.</li>
+  <li><strong>Public URL: <code>https://beyond-the-known.eu/cookbook/</code>.</strong> Eleventy's <code>pathPrefix</code> is <code>"/cookbook/"</code> and <code>site.url</code> in <code>src/_data/site.js</code> is the full URL (used for canonical links and social previews).</li>
+  <li>All internal links and asset paths go through Eleventy's <code>url</code> filter (HTML Base plugin), so no hardcoded <code>/</code> paths. The planner and search scripts get the prefix from a <code>data-base</code> attribute on <code>&lt;html&gt;</code>.</li>
+  <li>GitHub setup: a project site is served under the custom domain of the owner's user site. So <code>beyond-the-known.eu</code> is configured as custom domain on the <code>&lt;user&gt;.github.io</code> repository, and this repository must be named <strong><code>cookbook</code></strong> (the folder name locally doesn't matter). No <code>CNAME</code> file in this repository.</li>
+  <li><code>npm run serve</code> also serves under <code>/cookbook/</code> locally, so prefix bugs show up during development.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="backlog">14. Backlog (not in v1)</h2>
+<table>
+  <tr><th>Feature</th><th>Status</th><th>Notes</th></tr>
+  <tr><td>Shopping list from planner</td><td><span class="status later">later</span></td><td>Sum scaled ingredients over a week, merge identical name + unit, grouped list with checkboxes, stored locally. The structured ingredient format is designed to make this possible.</td></tr>
+  <tr><td>Planner export / import</td><td><span class="status later">later</span></td><td>Download and load the planner as JSON to move it between devices without a server.</td></tr>
+  <tr><td>Cook mode</td><td><span class="status later">later</span></td><td>Screen Wake Lock so the phone stays on, larger text, tick off steps.</td></tr>
+  <tr><td>Print stylesheet</td><td><span class="status later">later</span></td><td>Clean one page recipe print.</td></tr>
+  <tr><td>Prep / cook time, nutrition</td><td><span class="status later">later</span></td><td>Optional frontmatter fields, not needed now.</td></tr>
+  <tr><td>Offline support (PWA)</td><td><span class="status later">later</span></td><td>Service worker so recipes and planner work without connection.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="open">15. Open questions</h2>
+<ul>
+  <li><span class="status open">open</span> Planner default week: the planner (and the "Add to planner" sheet) opens on the current week, also late on a Sunday. Should it jump to next week once the current week has no days left?</li>
+  <li><span class="status open">open</span> Search excerpts include tag names ("vegetarian. dairy-free.") because tags are part of the indexed text, which also makes a plain search for "vegan" work. Keep, or exclude tags from the text and rely on the filters?</li>
+  <li><span class="status open">open</span> Home page tiles only show categories that have recipes (4 of 11 today). Show all 11 instead, with empty ones leading to their "no recipes yet" page?</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="changelog">16. Changelog</h2>
+<ul>
+  <li><strong>1.0, 2026-09-26</strong>: first implementation. Decisions made while building: own search UI on the Pagefind JavaScript API instead of the Component UI, with a filter sheet on phones, facet counts and search state in the URL; planner interaction details (dish picker, day toggle rows with inline replace confirmation, Undo toasts, day sheet for portions, swipe between weeks, <code>?week=</code>); planner grid from 1024px; compact card rows on phones; solid/on-solid shades and <code>light-dark()</code> colours; unit plural only above 1; site name in Nunito; project structure updated. Three new open questions.</li>
+  <li><strong>0.9, 2026-09-26</strong>: recipe URLs come only from the file name (never categories or tags), enforced by a fixed permalink. Ingredient units are written in the singular and pluralised on display. Recipes without a method yet are listed in the build info.</li>
+  <li><strong>0.8, 2026-09-26</strong>: site name set to "Recipe Book"; all open questions resolved.</li>
+  <li><strong>0.7, 2026-09-26</strong>: typography decided (Nunito, self hosted, latin-ext). Photos: one folder per recipe, main photo with optional <code>imagePosition</code> and <code>gallery</code>, originals committed but pre-shrunk with EXIF removed.</li>
+  <li><strong>0.6, 2026-09-26</strong>: resolved open questions. URL <code>beyond-the-known.eu/cookbook</code> (pathPrefix <code>/cookbook/</code>, repo named <code>cookbook</code>); light/dark mode with a subtle footer toggle stored in <code>localStorage</code>; automatic g↔kg and ml↔l switching; planner keeps the 8 previous weeks.</li>
+  <li><strong>0.5, 2026-09-26</strong>: site artwork: logo, favicon (with PNG fallbacks rendered at build), home page hero, empty planner, no search results and 404 illustrations. Artwork script renamed to <code>scripts/make_artwork.py</code>.</li>
+  <li><strong>0.4, 2026-09-26</strong>: placeholder artwork for recipes without a photo. Deliberately flat, non photographic illustration per category plus a generic fallback, generated by <code>scripts/make_artwork.py</code>; "No photo yet" chip and build info list.</li>
+  <li><strong>0.3, 2026-09-26</strong>: ingredients now in YAML block style, either a plain list or grouped under section names (replaces the per-item <code>group</code> field). Unknown ingredient fields fail the build.</li>
+  <li><strong>0.2, 2026-09-26</strong>: added Categories and tags. Fixed lists for both in <code>src/_data/taxonomy.js</code> with colours per term, descriptive build errors for unknown terms, derived badge colours. Example recipe tags aligned with the list.</li>
+  <li><strong>0.1, 2026-09-26</strong>: first draft. Decided: English, Pagefind, structured frontmatter ingredients, metric units only, tags field, one dinner per day planner with calendar weeks, shopping list moved to backlog.</li>
+</ul>
+
+</main>
+</body>
+</html>

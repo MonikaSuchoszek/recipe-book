@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en" data-base="/cookbook/" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Search · Recipe Book</title>
+  <meta name="description" content="Healthy, everyday recipes that scale to any number of portions, plus a weekly dinner planner.">
+  <link rel="canonical" href="https://beyond-the-known.eu/cookbook/search/">
+  <script>
+    // Apply the saved theme before the first paint, so there is no flash of the wrong colours
+    (function () {
+      var theme = "system";
+      try { theme = localStorage.getItem("recipeBook.theme") || "system"; } catch (error) {}
+      if (["system", "light", "dark"].indexOf(theme) < 0) theme = "system";
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+  <meta name="theme-color" content="#FBFAF5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121814" media="(prefers-color-scheme: dark)">
+  <link rel="preload" href="/cookbook/assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/cookbook/assets/fonts/nunito-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/cookbook/assets/css/main.css">
+  <link rel="stylesheet" href="/cookbook/assets/css/taxonomy.css">
+  <link rel="icon" type="image/svg+xml" href="/cookbook/assets/illustrations/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cookbook/favicon-32.png">
+  <link rel="apple-touch-icon" href="/cookbook/apple-touch-icon.png">
+  <meta property="og:site_name" content="Recipe Book">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Search">
+  <meta property="og:description" content="Healthy, everyday recipes that scale to any number of portions, plus a weekly dinner planner.">
+  <meta property="og:url" content="https://beyond-the-known.eu/cookbook/search/">
+  <meta property="og:image" content="https://beyond-the-known.eu/cookbook/assets/images/social/bRqVm7hmPd-1200.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="600">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="page-search">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="/cookbook/">
+        <img class="brand__logo" src="/cookbook/assets/illustrations/logo.svg" alt="" width="40" height="40">
+        <span class="brand__name">Recipe Book</span>
+      </a>
+      
+<nav class="top-nav" aria-label="Main">
+  <ul>
+    <li>
+      <a href="/cookbook/">
+        <span class="nav-icon"><svg class="icon icon-home" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="nav-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/search/" aria-current="page">
+        <span class="nav-icon"><svg class="icon icon-search" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></span>
+        <span class="nav-label">Search</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/planner/">
+        <span class="nav-icon"><svg class="icon icon-calendar" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg></span>
+        <span class="nav-label">Planner</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </header>
+
+  <main id="main" class="site-main" tabindex="-1">
+    <header class="page-head page-head--compact">
+  <h1>Find a recipe</h1>
+</header>
+
+<div class="search" data-search>
+  <form class="searchbar search__bar" action="/cookbook/search/" method="get" role="search" data-search-form>
+    <label class="visually-hidden" for="search-input">Search recipes</label>
+    <svg class="icon icon-search searchbar__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+    <input id="search-input" class="searchbar__input" type="search" name="q" placeholder="Dish, ingredient, anything…"
+      autocomplete="off" enterkeyhint="search" data-search-input>
+    <button type="button" class="icon-button searchbar__clear" data-search-clear aria-label="Clear search" hidden><svg class="icon icon-x" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </form>
+
+  <div class="search__toolbar needs-js">
+    <button type="button" class="button button--soft search__filter-button" data-open-filters aria-haspopup="dialog">
+      <svg class="icon icon-sliders" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg><span>Filters</span><span class="count-badge" data-filter-count hidden></span>
+    </button>
+    <p class="search__summary" data-search-summary aria-live="polite"></p>
+  </div>
+  <ul class="active-filters" data-active-filters aria-label="Active filters"></ul>
+
+  <div class="search__layout">
+    <dialog class="sheet filters-sheet" id="filters-sheet" aria-labelledby="filters-title">
+      <div class="sheet__panel" data-sheet-panel>
+        <div class="sheet__grip" aria-hidden="true"></div>
+        <header class="sheet__header">
+          <h2 class="sheet__title" id="filters-title">Filters</h2>
+          <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close filters"><svg class="icon icon-x" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </header>
+        <div class="sheet__body filters" data-filters></div>
+        <footer class="sheet__footer filters__footer">
+          <button type="button" class="button button--ghost" data-clear-filters>Clear all</button>
+          <button type="button" class="button button--primary" data-sheet-close data-show-results>Show recipes</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <div class="search__results">
+      <div class="card-grid card-grid--list" data-results aria-busy="false"></div>
+      <div class="empty-state" data-no-results hidden>
+        <img src="/cookbook/assets/illustrations/no-results.svg" alt="" width="400" height="300">
+        <h2>No recipes found</h2>
+        <p>Try fewer or different words, or clear some filters.</p>
+        <button type="button" class="button button--ghost" data-clear-all>Clear search and filters</button>
+      </div>
+      <p class="notice" data-search-error hidden></p>
+      <noscript>
+        <p class="notice">Search needs JavaScript. You can still <a href="/cookbook/recipes/">browse all recipes</a>.</p>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="recipe-index">
+[
+  {
+    "slug": "elastic-pancakes",
+    "title": "Elastic Pancakes (Naleśniki elastyczne)",
+    "description": "Flexible pancakes that don't dry out, filled with potato, feta and olives.",
+    "url": "/cookbook/recipes/elastic-pancakes/",
+    "image": "/cookbook/assets/illustrations/main.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Main", "className": "cat-main" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }],
+    "servings": { "amount": 4, "unit": "servings", "unitSingular": "serving" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "quick-bread",
+    "title": "Quick Bread (Chleb szybki)",
+    "description": "No-knead overnight loaf with a crackling crust, baked in a covered dish.",
+    "url": "/cookbook/recipes/quick-bread/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegan", "className": "tag-vegan" }, { "name": "dairy-free", "className": "tag-dairy-free" }, { "name": "make-ahead", "className": "tag-make-ahead" }],
+    "servings": { "amount": 1, "unit": "loaves", "unitSingular": "loaf" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "savoury-muffins",
+    "title": "Savoury Muffins",
+    "description": "Cheesy muffins with olives, sun-dried tomatoes or whatever mix-ins you have at hand.",
+    "url": "/cookbook/recipes/savoury-muffins/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }, { "name": "lunchbox", "className": "tag-lunchbox" }],
+    "servings": { "amount": 12, "unit": "muffins", "unitSingular": "muffin" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "shortcrust-pastry",
+    "title": "Shortcrust Pastry for a Tart (Kruche ciasto na tartę)",
+    "description": "Crisp, lightly sweet tart base with just five ingredients.",
+    "url": "/cookbook/recipes/shortcrust-pastry/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }],
+    "servings": { "amount": 1, "unit": "tart bases", "unitSingular": "tart base" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "sponge-cake",
+    "title": "Sponge Cake (Biszkopt)",
+    "description": "Classic light Polish sponge, made with only eggs, sugar, flour and potato starch.",
+    "url": "/cookbook/recipes/sponge-cake/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }, { "name": "dairy-free", "className": "tag-dairy-free" }],
+    "servings": { "amount": 1, "unit": "cakes", "unitSingular": "cake" },
+    "date": "2026-09-26"
+  }
+]
+</script>
+
+<script type="application/json" id="filter-index">
+[
+  {
+    "filter": "category", "param": "category", "label": "Category",
+    "terms": [{ "name": "Breakfast", "slug": "breakfast", "className": "cat-breakfast" }, { "name": "Lunch", "slug": "lunch", "className": "cat-lunch" }, { "name": "Main", "slug": "main", "className": "cat-main" }, { "name": "Soup", "slug": "soup", "className": "cat-soup" }, { "name": "Salad", "slug": "salad", "className": "cat-salad" }, { "name": "Side", "slug": "side", "className": "cat-side" }, { "name": "Snack", "slug": "snack", "className": "cat-snack" }, { "name": "Baking", "slug": "baking", "className": "cat-baking" }, { "name": "Dessert", "slug": "dessert", "className": "cat-dessert" }, { "name": "Drink", "slug": "drink", "className": "cat-drink" }, { "name": "Sauce & Dressing", "slug": "sauce-dressing", "className": "cat-sauce-dressing" }]
+  },
+  {
+    "filter": "Diet", "param": "diet", "label": "Diet",
+    "terms": [{ "name": "vegetarian", "slug": "vegetarian", "className": "tag-vegetarian" }, { "name": "vegan", "slug": "vegan", "className": "tag-vegan" }, { "name": "gluten-free", "slug": "gluten-free", "className": "tag-gluten-free" }, { "name": "dairy-free", "slug": "dairy-free", "className": "tag-dairy-free" }, { "name": "high-protein", "slug": "high-protein", "className": "tag-high-protein" }]
+  },
+  {
+    "filter": "Effort", "param": "effort", "label": "Effort",
+    "terms": [{ "name": "quick", "slug": "quick", "className": "tag-quick" }, { "name": "one-pot", "slug": "one-pot", "className": "tag-one-pot" }, { "name": "make-ahead", "slug": "make-ahead", "className": "tag-make-ahead" }, { "name": "freezer-friendly", "slug": "freezer-friendly", "className": "tag-freezer-friendly" }, { "name": "lunchbox", "slug": "lunchbox", "className": "tag-lunchbox" }]
+  },
+  {
+    "filter": "Main ingredient", "param": "main-ingredient", "label": "Main ingredient",
+    "terms": [{ "name": "legumes", "slug": "legumes", "className": "tag-legumes" }, { "name": "fish", "slug": "fish", "className": "tag-fish" }, { "name": "chicken", "slug": "chicken", "className": "tag-chicken" }, { "name": "tofu", "slug": "tofu", "className": "tag-tofu" }, { "name": "whole grains", "slug": "whole-grains", "className": "tag-whole-grains" }, { "name": "eggs", "slug": "eggs", "className": "tag-eggs" }]
+  },
+  {
+    "filter": "Season", "param": "season", "label": "Season",
+    "terms": [{ "name": "spring", "slug": "spring", "className": "tag-spring" }, { "name": "summer", "slug": "summer", "className": "tag-summer" }, { "name": "autumn", "slug": "autumn", "className": "tag-autumn" }, { "name": "winter", "slug": "winter", "className": "tag-winter" }]
+  },
+  {
+    "filter": "Audience", "param": "audience", "label": "Audience",
+    "terms": [{ "name": "kid-friendly", "slug": "kid-friendly", "className": "tag-kid-friendly" }]
+  }
+]
+</script>
+
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__brand">
+      <img src="/cookbook/assets/illustrations/logo.svg" alt="" width="28" height="28">
+      <span>Recipe Book</span>
+    </p>
+    <ul class="site-footer__links">
+      <li><a href="/cookbook/recipes/">All recipes</a></li>
+      <li><a href="/cookbook/search/">Search</a></li>
+      <li><a href="/cookbook/planner/">Planner</a></li>
+    </ul>
+    <fieldset class="appearance" data-appearance>
+      <legend>Appearance</legend>
+      <label>
+        <input type="radio" name="appearance" value="system" checked>
+        <svg class="icon icon-monitor" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>System</span>
+      </label>
+      <label>
+        <input type="radio" name="appearance" value="light">
+        <svg class="icon icon-sun" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span>Light</span>
+      </label>
+      <label>
+        <input type="radio" name="appearance" value="dark">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span>
+      </label>
+    </fieldset>
+  </div>
+</footer>
+
+
+  
+<nav class="tabbar" aria-label="Main (bottom)">
+  <ul>
+    <li>
+      <a href="/cookbook/">
+        <span class="nav-icon"><svg class="icon icon-home" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="nav-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/search/" aria-current="page">
+        <span class="nav-icon"><svg class="icon icon-search" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></span>
+        <span class="nav-label">Search</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/planner/">
+        <span class="nav-icon"><svg class="icon icon-calendar" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg></span>
+        <span class="nav-label">Planner</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+  <div class="toaster" id="toaster" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="/cookbook/assets/js/theme.js"></script>
+  <script type="module" src="/cookbook/assets/js/search.js"></script>
+</body>
+</html>

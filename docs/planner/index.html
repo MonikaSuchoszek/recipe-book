@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" data-base="/cookbook/" data-theme="system">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Planner · Recipe Book</title>
+  <meta name="description" content="Plan one dinner per day for the week. Saved on this device.">
+  <link rel="canonical" href="https://beyond-the-known.eu/cookbook/planner/">
+  <script>
+    // Apply the saved theme before the first paint, so there is no flash of the wrong colours
+    (function () {
+      var theme = "system";
+      try { theme = localStorage.getItem("recipeBook.theme") || "system"; } catch (error) {}
+      if (["system", "light", "dark"].indexOf(theme) < 0) theme = "system";
+      document.documentElement.setAttribute("data-theme", theme);
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+  <meta name="theme-color" content="#FBFAF5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121814" media="(prefers-color-scheme: dark)">
+  <link rel="preload" href="/cookbook/assets/fonts/nunito-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/cookbook/assets/fonts/nunito-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/cookbook/assets/css/main.css">
+  <link rel="stylesheet" href="/cookbook/assets/css/taxonomy.css">
+  <link rel="icon" type="image/svg+xml" href="/cookbook/assets/illustrations/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/cookbook/favicon-32.png">
+  <link rel="apple-touch-icon" href="/cookbook/apple-touch-icon.png">
+  <meta property="og:site_name" content="Recipe Book">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Planner">
+  <meta property="og:description" content="Plan one dinner per day for the week. Saved on this device.">
+  <meta property="og:url" content="https://beyond-the-known.eu/cookbook/planner/">
+  <meta property="og:image" content="https://beyond-the-known.eu/cookbook/assets/images/social/bRqVm7hmPd-1200.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="600">
+  <meta name="twitter:card" content="summary_large_image">
+</head>
+<body class="page-planner">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="/cookbook/">
+        <img class="brand__logo" src="/cookbook/assets/illustrations/logo.svg" alt="" width="40" height="40">
+        <span class="brand__name">Recipe Book</span>
+      </a>
+      
+<nav class="top-nav" aria-label="Main">
+  <ul>
+    <li>
+      <a href="/cookbook/">
+        <span class="nav-icon"><svg class="icon icon-home" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="nav-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/search/">
+        <span class="nav-icon"><svg class="icon icon-search" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></span>
+        <span class="nav-label">Search</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/planner/" aria-current="page">
+        <span class="nav-icon"><svg class="icon icon-calendar" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg></span>
+        <span class="nav-label">Planner</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+    </div>
+  </header>
+
+  <main id="main" class="site-main" tabindex="-1">
+    <header class="page-head page-head--compact planner-head">
+  <h1>Dinner planner</h1>
+  <p class="page-head__lede">One dinner a day, saved on this device.</p>
+</header>
+
+<div class="planner" data-planner>
+  <p class="notice notice--warning" data-storage-notice hidden></p>
+
+  <div class="weekbar needs-js">
+    <button type="button" class="icon-button weekbar__nav" data-week-prev aria-label="Previous week"><svg class="icon icon-chevron-left" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
+    <div class="weekbar__label" aria-live="polite">
+      <strong class="weekbar__name" data-week-name>This week</strong>
+      <span class="weekbar__range" data-week-range></span>
+    </div>
+    <button type="button" class="icon-button weekbar__nav" data-week-next aria-label="Next week"><svg class="icon icon-chevron-right" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m9 18 6-6-6-6"/></svg></button>
+  </div>
+
+  <div class="planner__meta needs-js">
+    <div class="progress" data-progress>
+      <span class="progress__text" data-progress-text></span>
+      <span class="progress__bar" aria-hidden="true"><span data-progress-bar></span></span>
+    </div>
+    <button type="button" class="button button--soft button--small" data-week-today hidden><svg class="icon icon-calendar" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg><span>This week</span></button>
+  </div>
+
+  <div class="planner__empty" data-planner-empty hidden>
+    <img src="/cookbook/assets/illustrations/empty-planner.svg" alt="" width="400" height="300">
+    <div>
+      <h2>Nothing planned this week yet</h2>
+      <p>Tap a day below to pick a dinner, or find one you like first.</p>
+      <a class="button button--ghost button--small" href="/cookbook/recipes/"><svg class="icon icon-book" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V5a2 2 0 0 1 2-2h13v14H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h13"/><path d="M8 7h7"/></svg><span>Browse recipes</span></a>
+    </div>
+  </div>
+
+  <ol class="days" data-days aria-label="Dinners this week"></ol>
+
+  <noscript>
+    <p class="notice">The planner runs in your browser and needs JavaScript.</p>
+  </noscript>
+</div>
+
+<dialog class="sheet" id="plan-dialog" aria-labelledby="plan-dialog-title">
+  <div class="sheet__panel" data-sheet-panel>
+    <div class="sheet__grip" aria-hidden="true"></div>
+    <header class="sheet__header">
+      <button type="button" class="icon-button sheet__back" data-sheet-back aria-label="Back to dish list" hidden><svg class="icon icon-chevron-left" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m15 18-6-6 6-6"/></svg></button>
+      <h2 class="sheet__title" id="plan-dialog-title">Add to planner</h2>
+      <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close"><svg class="icon icon-x" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="sheet__body" data-sheet-body></div>
+    <footer class="sheet__footer" data-sheet-footer hidden></footer>
+  </div>
+</dialog>
+
+
+<dialog class="sheet sheet--compact" id="portions-sheet" aria-labelledby="portions-sheet-title">
+  <div class="sheet__panel" data-sheet-panel>
+    <div class="sheet__grip" aria-hidden="true"></div>
+    <header class="sheet__header">
+      <h2 class="sheet__title" id="portions-sheet-title">Portions</h2>
+      <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close"><svg class="icon icon-x" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="sheet__body" data-portions-body></div>
+    <footer class="sheet__footer">
+      <button type="button" class="button button--primary button--block" data-sheet-close>Done</button>
+    </footer>
+  </div>
+</dialog>
+
+<script type="application/json" id="recipe-index">
+[
+  {
+    "slug": "elastic-pancakes",
+    "title": "Elastic Pancakes (Naleśniki elastyczne)",
+    "description": "Flexible pancakes that don't dry out, filled with potato, feta and olives.",
+    "url": "/cookbook/recipes/elastic-pancakes/",
+    "image": "/cookbook/assets/illustrations/main.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Main", "className": "cat-main" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }],
+    "servings": { "amount": 4, "unit": "servings", "unitSingular": "serving" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "quick-bread",
+    "title": "Quick Bread (Chleb szybki)",
+    "description": "No-knead overnight loaf with a crackling crust, baked in a covered dish.",
+    "url": "/cookbook/recipes/quick-bread/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegan", "className": "tag-vegan" }, { "name": "dairy-free", "className": "tag-dairy-free" }, { "name": "make-ahead", "className": "tag-make-ahead" }],
+    "servings": { "amount": 1, "unit": "loaves", "unitSingular": "loaf" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "savoury-muffins",
+    "title": "Savoury Muffins",
+    "description": "Cheesy muffins with olives, sun-dried tomatoes or whatever mix-ins you have at hand.",
+    "url": "/cookbook/recipes/savoury-muffins/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }, { "name": "lunchbox", "className": "tag-lunchbox" }],
+    "servings": { "amount": 12, "unit": "muffins", "unitSingular": "muffin" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "shortcrust-pastry",
+    "title": "Shortcrust Pastry for a Tart (Kruche ciasto na tartę)",
+    "description": "Crisp, lightly sweet tart base with just five ingredients.",
+    "url": "/cookbook/recipes/shortcrust-pastry/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }],
+    "servings": { "amount": 1, "unit": "tart bases", "unitSingular": "tart base" },
+    "date": "2026-09-26"
+  },
+  {
+    "slug": "sponge-cake",
+    "title": "Sponge Cake (Biszkopt)",
+    "description": "Classic light Polish sponge, made with only eggs, sugar, flour and potato starch.",
+    "url": "/cookbook/recipes/sponge-cake/",
+    "image": "/cookbook/assets/illustrations/baking.svg",
+    "placeholder": true,
+    "imagePosition": "center",
+    "category": { "name": "Baking", "className": "cat-baking" },
+    "tags": [{ "name": "vegetarian", "className": "tag-vegetarian" }, { "name": "dairy-free", "className": "tag-dairy-free" }],
+    "servings": { "amount": 1, "unit": "cakes", "unitSingular": "cake" },
+    "date": "2026-09-26"
+  }
+]
+</script>
+
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__brand">
+      <img src="/cookbook/assets/illustrations/logo.svg" alt="" width="28" height="28">
+      <span>Recipe Book</span>
+    </p>
+    <ul class="site-footer__links">
+      <li><a href="/cookbook/recipes/">All recipes</a></li>
+      <li><a href="/cookbook/search/">Search</a></li>
+      <li><a href="/cookbook/planner/">Planner</a></li>
+    </ul>
+    <fieldset class="appearance" data-appearance>
+      <legend>Appearance</legend>
+      <label>
+        <input type="radio" name="appearance" value="system" checked>
+        <svg class="icon icon-monitor" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>System</span>
+      </label>
+      <label>
+        <input type="radio" name="appearance" value="light">
+        <svg class="icon icon-sun" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2.5 12h2M19.5 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span>Light</span>
+      </label>
+      <label>
+        <input type="radio" name="appearance" value="dark">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z"/></svg><span>Dark</span>
+      </label>
+    </fieldset>
+  </div>
+</footer>
+
+
+  
+<nav class="tabbar" aria-label="Main (bottom)">
+  <ul>
+    <li>
+      <a href="/cookbook/">
+        <span class="nav-icon"><svg class="icon icon-home" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg></span>
+        <span class="nav-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/search/">
+        <span class="nav-icon"><svg class="icon icon-search" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg></span>
+        <span class="nav-label">Search</span>
+      </a>
+    </li>
+    <li>
+      <a href="/cookbook/planner/" aria-current="page">
+        <span class="nav-icon"><svg class="icon icon-calendar" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="17" rx="2.5"/><path d="M8 2.5v4M16 2.5v4M3 10h18"/></svg></span>
+        <span class="nav-label">Planner</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+
+  <div class="toaster" id="toaster" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module" src="/cookbook/assets/js/theme.js"></script>
+  <script type="module" src="/cookbook/assets/js/planner.js"></script>
+</body>
+</html>

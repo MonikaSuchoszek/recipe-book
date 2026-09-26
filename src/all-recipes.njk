@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+title: All recipes
+permalink: /recipes/
+bodyClass: page-list
+---
+<header class="page-head">
+  <h1>All recipes</h1>
+  <p class="page-head__lede">{{ collections.recipes.length }} recipes, A to Z.</p>
+</header>
+<div class="card-grid card-grid--adaptive">
+  {%- for item in collections.recipes %}
+  {% include "partials/card.njk" %}
+  {%- endfor %}
+</div>

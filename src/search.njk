@@ -1,0 +1,62 @@
+---
+layout: layouts/base.njk
+title: Search
+navKey: search
+bodyClass: page-search
+scripts: [search.js]
+---
+<header class="page-head page-head--compact">
+  <h1>Find a recipe</h1>
+</header>
+
+<div class="search" data-search>
+  <form class="searchbar search__bar" action="{{ '/search/' | url }}" method="get" role="search" data-search-form>
+    <label class="visually-hidden" for="search-input">Search recipes</label>
+    {% icon "search", "searchbar__icon" %}
+    <input id="search-input" class="searchbar__input" type="search" name="q" placeholder="Dish, ingredient, anything…"
+      autocomplete="off" enterkeyhint="search" data-search-input>
+    <button type="button" class="icon-button searchbar__clear" data-search-clear aria-label="Clear search" hidden>{% icon "x" %}</button>
+  </form>
+
+  <div class="search__toolbar needs-js">
+    <button type="button" class="button button--soft search__filter-button" data-open-filters aria-haspopup="dialog">
+      {% icon "sliders" %}<span>Filters</span><span class="count-badge" data-filter-count hidden></span>
+    </button>
+    <p class="search__summary" data-search-summary aria-live="polite"></p>
+  </div>
+  <ul class="active-filters" data-active-filters aria-label="Active filters"></ul>
+
+  <div class="search__layout">
+    <dialog class="sheet filters-sheet" id="filters-sheet" aria-labelledby="filters-title">
+      <div class="sheet__panel" data-sheet-panel>
+        <div class="sheet__grip" aria-hidden="true"></div>
+        <header class="sheet__header">
+          <h2 class="sheet__title" id="filters-title">Filters</h2>
+          <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close filters">{% icon "x" %}</button>
+        </header>
+        <div class="sheet__body filters" data-filters></div>
+        <footer class="sheet__footer filters__footer">
+          <button type="button" class="button button--ghost" data-clear-filters>Clear all</button>
+          <button type="button" class="button button--primary" data-sheet-close data-show-results>Show recipes</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <div class="search__results">
+      <div class="card-grid card-grid--list" data-results aria-busy="false"></div>
+      <div class="empty-state" data-no-results hidden>
+        <img src="{{ '/assets/illustrations/no-results.svg' | url }}" alt="" width="400" height="300">
+        <h2>No recipes found</h2>
+        <p>Try fewer or different words, or clear some filters.</p>
+        <button type="button" class="button button--ghost" data-clear-all>Clear search and filters</button>
+      </div>
+      <p class="notice" data-search-error hidden></p>
+      <noscript>
+        <p class="notice">Search needs JavaScript. You can still <a href="{{ '/recipes/' | url }}">browse all recipes</a>.</p>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+{% include "partials/recipe-index.njk" %}
+{% include "partials/filter-index.njk" %}

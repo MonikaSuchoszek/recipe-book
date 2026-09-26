@@ -1,0 +1,18 @@
+{#- Recipe card: 4:3 thumbnail, title, first category, up to two tag chips. Expects `item` (a collection entry). -#}
+{%- set r = item.data.recipe %}
+<article class="card {{ r.primary.className }}">
+  <a class="card__link" href="{{ item.url | url }}">
+    <div class="card__media">{{ item.data.media.card | safe }}</div>
+    <div class="card__body">
+      <p class="card__category">{{ r.primary.name }}</p>
+      <h3 class="card__title">{{ item.data.title }}</h3>
+      {%- if r.tags.length %}
+      <ul class="chips chips--small" aria-label="Tags">
+        {%- for tag in r.tags.slice(0, 2) %}
+        <li class="chip {{ tag.className }}">{{ tag.name }}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+    </div>
+  </a>
+</article>

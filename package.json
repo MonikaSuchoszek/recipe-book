@@ -1,0 +1,20 @@
+{
+  "name": "recipe-book",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run clean && eleventy && pagefind --site docs",
+    "serve": "npm run build && eleventy --serve",
+    "clean": "node -e \"require('fs').rmSync('docs',{recursive:true,force:true})\"",
+    "photos": "python3 scripts/shrink_photos.py src/assets/images/recipes"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy-img": "^7.0.0",
+    "@fontsource/nunito": "^5.3.0",
+    "@sindresorhus/slugify": "^2.2.1",
+    "gray-matter": "^4.0.3",
+    "pagefind": "^1.5.2"
+  }
+}

@@ -1,0 +1,20 @@
+{#- Spin counter for portions. Works as plain text without JavaScript (progressive enhancement). -#}
+{%- set s = recipe.servings %}
+<section class="portions" aria-labelledby="portions-title"
+  data-portions data-base="{{ s.amount }}" data-unit="{{ s.unit }}" data-unit-singular="{{ s.unitSingular }}">
+  <h2 class="portions__title" id="portions-title">Portions</h2>
+  <p class="portions__static no-js-only">Makes {{ s.amount }} {{ s.unitSingular if s.amount == 1 else s.unit }}</p>
+  <div class="stepper needs-js" role="group" aria-labelledby="portions-title">
+    <button type="button" class="stepper__btn" data-step="-1" aria-label="Fewer {{ s.unit }}">{% icon "minus" %}</button>
+    <label class="stepper__value">
+      <input class="stepper__input" type="number" inputmode="numeric" pattern="[0-9]*" min="1" max="99" step="1"
+        value="{{ s.amount }}" aria-label="Number of {{ s.unit }}">
+      <span class="stepper__unit" data-unit-label>{{ s.unitSingular if s.amount == 1 else s.unit }}</span>
+    </label>
+    <button type="button" class="stepper__btn" data-step="1" aria-label="More {{ s.unit }}">{% icon "plus" %}</button>
+  </div>
+  {%- if s.note %}<p class="portions__note">{{ s.note }}</p>{% endif %}
+  <button type="button" class="link-button portions__reset needs-js" data-reset hidden>
+    {% icon "reset" %}<span>Reset to {{ s.amount }}</span>
+  </button>
+</section>

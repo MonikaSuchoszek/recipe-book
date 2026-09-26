@@ -1,0 +1,112 @@
+---
+layout: layouts/base.njk
+bodyClass: page-recipe
+scripts: [scaler.js, recipe-page.js]
+---
+{%- set primary = recipe.primary %}
+{%- set plannerEntry = {
+  slug: recipe.slug,
+  title: title,
+  url: page.url | url,
+  image: media.thumbnail,
+  servings: recipe.servings
+} %}
+<article class="recipe {{ primary.className }}" data-pagefind-body data-recipe="{{ plannerEntry | dump }}">
+  <span hidden data-pagefind-meta="slug">{{ recipe.slug }}</span>
+
+  <figure class="recipe__media{% if recipe.image.placeholder %} is-placeholder{% endif %}">
+    {{ media.header | safe }}
+    {%- if recipe.image.placeholder %}
+    <figcaption class="photo-chip" data-pagefind-ignore>{% icon "camera" %}<span>No photo yet</span></figcaption>
+    {%- endif %}
+  </figure>
+
+  <div class="recipe__sheet">
+    <header class="recipe__header">
+      <ul class="chips" aria-label="Categories">
+        {%- for category in recipe.categories %}
+        <li><a class="chip chip--category {{ category.className }}" href="{{ ('/categories/' + category.slug + '/') | url }}"
+          data-pagefind-filter="category"{% if category.description %} title="{{ category.description }}"{% endif %}>{{ category.name }}</a></li>
+        {%- endfor %}
+      </ul>
+      <h1 class="recipe__title" data-pagefind-meta="title">{{ title }}</h1>
+      {%- if description %}<p class="recipe__lede">{{ description }}</p>{% endif %}
+      {%- if recipe.tags.length %}
+      <ul class="chips" aria-label="Tags">
+        {%- for tag in recipe.tags %}
+        <li><a class="chip {{ tag.className }}" href="{{ '/search/' | url }}?{{ tag.group | slugify }}={{ tag.slug }}"
+          data-pagefind-filter="{{ tag.group }}"{% if tag.description %} title="{{ tag.description }}"{% endif %}>{{ tag.name }}</a></li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+    </header>
+
+    <div class="recipe__layout">
+      <aside class="recipe__side">
+        <div class="recipe__controls" data-pagefind-ignore>
+          {% include "partials/portion-counter.njk" %}
+          <button type="button" class="button button--accent button--block needs-js" data-add-to-planner>
+            {% icon "calendar-plus" %}<span>Add to planner</span>
+          </button>
+          <p class="planned-note" data-planned-note hidden></p>
+        </div>
+
+        <section class="ingredients" aria-labelledby="ingredients-title">
+          <h2 id="ingredients-title" data-pagefind-ignore>Ingredients</h2>
+          {%- for group in recipe.ingredientGroups %}
+          {%- if group.name %}<h3 class="ingredients__group">{{ group.name }}</h3>{% endif %}
+          <ul class="ingredients__list">
+            {%- for item in group.items %}
+            <li class="ingredient"{% if item.scale %} data-amount="{{ item.amount }}" data-unit="{{ item.unit }}"{% endif %}>
+              <span class="ingredient__qty">
+                {%- if item.display.amount %}<span class="ingredient__amount">{{ item.display.amount }}</span>{% endif -%}
+                {%- if item.display.unit %} <span class="ingredient__unit">{{ item.display.unit }}</span>{% endif -%}
+              </span>
+              <span class="ingredient__name">{{ item.name }}{% if item.note %}<span class="ingredient__note">{{ item.note }}</span>{% endif %}</span>
+            </li>
+            {%- endfor %}
+          </ul>
+          {%- endfor %}
+        </section>
+      </aside>
+
+      <div class="recipe__main">
+        <section class="method" aria-labelledby="method-title">
+          <h2 id="method-title" data-pagefind-ignore>Method</h2>
+          <div class="prose{% if not recipe.hasMethod %} prose--pending{% endif %}">
+            {{ content | safe }}
+          </div>
+        </section>
+
+        {%- if media.gallery.length %}
+        <section class="gallery" aria-labelledby="gallery-title" data-pagefind-ignore>
+          <h2 id="gallery-title">Photos</h2>
+          <ul class="gallery__grid">
+            {%- for img in media.gallery %}
+            <li>
+              <a class="gallery__thumb" href="{{ img.full.url }}" data-gallery-index="{{ loop.index0 }}"
+                data-full="{{ img.full.url }}" data-srcset="{{ img.srcset }}" data-caption="{{ img.caption }}">
+                <img src="{{ img.thumb.url }}" alt="{{ img.caption or ('Photo ' + loop.index + ' of ' + title) }}" width="{{ img.thumb.width }}" height="{{ img.thumb.height }}" loading="lazy" decoding="async">
+              </a>
+            </li>
+            {%- endfor %}
+          </ul>
+        </section>
+        {%- endif %}
+      </div>
+    </div>
+  </div>
+  <span hidden data-pagefind-meta="image">{{ media.thumbnail }}</span>
+</article>
+
+{% include "partials/planner-dialog.njk" %}
+
+{%- if media.gallery.length %}
+<dialog class="viewer" id="gallery-viewer" aria-label="Photos">
+  <div class="viewer__track" data-viewer-track></div>
+  <button type="button" class="icon-button viewer__close" data-viewer-close aria-label="Close photos">{% icon "x" %}</button>
+  <button type="button" class="icon-button viewer__prev" data-viewer-prev aria-label="Previous photo">{% icon "chevron-left" %}</button>
+  <button type="button" class="icon-button viewer__next" data-viewer-next aria-label="Next photo">{% icon "chevron-right" %}</button>
+</dialog>
+<script type="module" src="{{ '/assets/js/gallery.js' | url }}"></script>
+{%- endif %}

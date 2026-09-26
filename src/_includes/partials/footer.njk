@@ -1,0 +1,22 @@
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <p class="site-footer__brand">
+      <img src="{{ '/assets/illustrations/logo.svg' | url }}" alt="" width="28" height="28">
+      <span>{{ site.name }}</span>
+    </p>
+    <ul class="site-footer__links">
+      <li><a href="{{ '/recipes/' | url }}">All recipes</a></li>
+      <li><a href="{{ '/search/' | url }}">Search</a></li>
+      <li><a href="{{ '/planner/' | url }}">Planner</a></li>
+    </ul>
+    <fieldset class="appearance" data-appearance>
+      <legend>Appearance</legend>
+      {%- for option in [{ value: "system", label: "System", icon: "monitor" }, { value: "light", label: "Light", icon: "sun" }, { value: "dark", label: "Dark", icon: "moon" }] %}
+      <label>
+        <input type="radio" name="appearance" value="{{ option.value }}"{% if option.value == "system" %} checked{% endif %}>
+        {% icon option.icon %}<span>{{ option.label }}</span>
+      </label>
+      {%- endfor %}
+    </fieldset>
+  </div>
+</footer>

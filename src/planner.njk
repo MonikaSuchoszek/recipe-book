@@ -1,0 +1,66 @@
+---
+layout: layouts/base.njk
+title: Planner
+description: Plan one dinner per day for the week. Saved on this device.
+navKey: planner
+bodyClass: page-planner
+scripts: [planner.js]
+---
+<header class="page-head page-head--compact planner-head">
+  <h1>Dinner planner</h1>
+  <p class="page-head__lede">One dinner a day, saved on this device.</p>
+</header>
+
+<div class="planner" data-planner>
+  <p class="notice notice--warning" data-storage-notice hidden></p>
+
+  <div class="weekbar needs-js">
+    <button type="button" class="icon-button weekbar__nav" data-week-prev aria-label="Previous week">{% icon "chevron-left" %}</button>
+    <div class="weekbar__label" aria-live="polite">
+      <strong class="weekbar__name" data-week-name>This week</strong>
+      <span class="weekbar__range" data-week-range></span>
+    </div>
+    <button type="button" class="icon-button weekbar__nav" data-week-next aria-label="Next week">{% icon "chevron-right" %}</button>
+  </div>
+
+  <div class="planner__meta needs-js">
+    <div class="progress" data-progress>
+      <span class="progress__text" data-progress-text></span>
+      <span class="progress__bar" aria-hidden="true"><span data-progress-bar></span></span>
+    </div>
+    <button type="button" class="button button--soft button--small" data-week-today hidden>{% icon "calendar" %}<span>This week</span></button>
+  </div>
+
+  <div class="planner__empty" data-planner-empty hidden>
+    <img src="{{ '/assets/illustrations/empty-planner.svg' | url }}" alt="" width="400" height="300">
+    <div>
+      <h2>Nothing planned this week yet</h2>
+      <p>Tap a day below to pick a dinner, or find one you like first.</p>
+      <a class="button button--ghost button--small" href="{{ '/recipes/' | url }}">{% icon "book" %}<span>Browse recipes</span></a>
+    </div>
+  </div>
+
+  <ol class="days" data-days aria-label="Dinners this week"></ol>
+
+  <noscript>
+    <p class="notice">The planner runs in your browser and needs JavaScript.</p>
+  </noscript>
+</div>
+
+{% include "partials/planner-dialog.njk" %}
+
+<dialog class="sheet sheet--compact" id="portions-sheet" aria-labelledby="portions-sheet-title">
+  <div class="sheet__panel" data-sheet-panel>
+    <div class="sheet__grip" aria-hidden="true"></div>
+    <header class="sheet__header">
+      <h2 class="sheet__title" id="portions-sheet-title">Portions</h2>
+      <button type="button" class="icon-button sheet__close" data-sheet-close aria-label="Close">{% icon "x" %}</button>
+    </header>
+    <div class="sheet__body" data-portions-body></div>
+    <footer class="sheet__footer">
+      <button type="button" class="button button--primary button--block" data-sheet-close>Done</button>
+    </footer>
+  </div>
+</dialog>
+
+{% include "partials/recipe-index.njk" %}

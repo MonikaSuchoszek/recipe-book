@@ -1,0 +1,66 @@
+---
+layout: layouts/base.njk
+title: Recipe Book
+navKey: home
+bodyClass: page-home
+scripts: [home.js]
+---
+<section class="hero">
+  <div class="hero__intro">
+    <h1 class="hero__title">Good food, <span>made simple</span></h1>
+    <p class="hero__lede">Healthy everyday recipes that scale to any number of portions.</p>
+  </div>
+  <div class="hero__art">
+    <img src="{{ '/assets/illustrations/hero.svg' | url }}" alt="A salad bowl surrounded by fruit, nuts and a drink" width="800" height="400" fetchpriority="high">
+  </div>
+  <form class="searchbar hero__search" action="{{ '/search/' | url }}" method="get" role="search">
+    <label class="visually-hidden" for="home-search">Search recipes</label>
+    {% icon "search", "searchbar__icon" %}
+    <input id="home-search" class="searchbar__input" type="search" name="q" placeholder="Search recipes or ingredients" autocomplete="off" enterkeyhint="search">
+    <button class="button button--primary searchbar__submit" type="submit">Search</button>
+  </form>
+</section>
+
+<section class="section week-teaser" aria-labelledby="week-title">
+  <a class="week-card" href="{{ '/planner/' | url }}" data-week-card>
+    <span class="week-card__icon">{% icon "calendar" %}</span>
+    <span class="week-card__text">
+      <span class="week-card__title" id="week-title" data-week-title>This week's dinners</span>
+      <span class="week-card__sub" data-week-sub>Plan your dinners for the week</span>
+      <span class="week-card__days" data-week-days aria-hidden="true"></span>
+    </span>
+    <span class="week-card__arrow">{% icon "chevron-right" %}</span>
+  </a>
+</section>
+
+<section class="section" aria-labelledby="categories-title">
+  <div class="section__head">
+    <h2 id="categories-title">Categories</h2>
+  </div>
+  <ul class="tiles">
+    {%- for category in terms.categories %}
+    {%- set count = (collections.recipes | inCategory(category.slug)).length %}
+    {%- if count %}
+    <li>
+      <a class="tile {{ category.className }}" href="{{ ('/categories/' + category.slug + '/') | url }}">
+        <img class="tile__art" src="{{ ('/assets/illustrations/' + category.illustration) | url }}" alt="" width="400" height="300" loading="lazy">
+        <span class="tile__name">{{ category.name }}</span>
+        <span class="tile__count">{{ count }} {{ count | pluralUnit("recipe", "recipes") }}</span>
+      </a>
+    </li>
+    {%- endif %}
+    {%- endfor %}
+  </ul>
+</section>
+
+<section class="section" aria-labelledby="recent-title">
+  <div class="section__head">
+    <h2 id="recent-title">Recently added</h2>
+    <a class="section__more" href="{{ '/recipes/' | url }}">All recipes {% icon "arrow-right" %}</a>
+  </div>
+  <div class="card-grid card-grid--rail">
+    {%- for item in collections.recentRecipes.slice(0, 6) %}
+    {% include "partials/card.njk" %}
+    {%- endfor %}
+  </div>
+</section>

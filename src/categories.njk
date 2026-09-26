@@ -1,0 +1,35 @@
+---
+layout: layouts/base.njk
+bodyClass: page-list
+pagination:
+  data: terms.categories
+  size: 1
+  alias: category
+permalink: "/categories/{{ category.slug }}/"
+eleventyComputed:
+  title: "{{ category.name }}"
+  description: "{{ category.description or (category.name + ' recipes from the Recipe Book.') }}"
+---
+{%- set recipes = collections.recipes | inCategory(category.slug) %}
+<header class="page-head page-head--category {{ category.className }}">
+  <img class="page-head__art" src="{{ ('/assets/illustrations/' + category.illustration) | url }}" alt="" width="400" height="300">
+  <div>
+    <p class="page-head__eyebrow">Category</p>
+    <h1>{{ category.name }}</h1>
+    <p class="page-head__lede">{% if category.description %}{{ category.description }} · {% endif %}{{ recipes.length }} {{ recipes.length | pluralUnit("recipe", "recipes") }}</p>
+  </div>
+</header>
+{%- if recipes.length %}
+<div class="card-grid card-grid--adaptive">
+  {%- for item in recipes %}
+  {% include "partials/card.njk" %}
+  {%- endfor %}
+</div>
+{%- else %}
+<div class="empty-state">
+  <img src="{{ '/assets/illustrations/no-results.svg' | url }}" alt="" width="400" height="300">
+  <h2>No {{ category.name | lower }} recipes yet</h2>
+  <p>New recipes are added regularly. In the meantime, have a look at the others.</p>
+  <a class="button button--primary" href="{{ '/recipes/' | url }}">Browse all recipes</a>
+</div>
+{%- endif %}

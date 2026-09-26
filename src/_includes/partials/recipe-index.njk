@@ -1,0 +1,21 @@
+{#- Compact list of all recipes for the browser scripts (search browse state, planner dish picker) -#}
+<script type="application/json" id="recipe-index">
+[
+{%- for item in collections.recipes %}
+  {%- set r = item.data.recipe %}
+  {
+    "slug": {{ r.slug | dump | safe }},
+    "title": {{ item.data.title | dump | safe }},
+    "description": {{ (item.data.description or "") | dump | safe }},
+    "url": {{ item.url | url | dump | safe }},
+    "image": {{ item.data.media.thumbnail | dump | safe }},
+    "placeholder": {{ r.image.placeholder | dump | safe }},
+    "imagePosition": {{ r.image.position | dump | safe }},
+    "category": { "name": {{ r.primary.name | dump | safe }}, "className": {{ r.primary.className | dump | safe }} },
+    "tags": [{% for tag in r.tags %}{ "name": {{ tag.name | dump | safe }}, "className": {{ tag.className | dump | safe }} }{% if not loop.last %}, {% endif %}{% endfor %}],
+    "servings": { "amount": {{ r.servings.amount }}, "unit": {{ r.servings.unit | dump | safe }}, "unitSingular": {{ r.servings.unitSingular | dump | safe }} },
+    "date": {{ item.date | isoDate | dump | safe }}
+  }{% if not loop.last %},{% endif %}
+{%- endfor %}
+]
+</script>

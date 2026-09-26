@@ -1,0 +1,2 @@
+# Python helper packages (data prep scripts etc.)
+Pillow>=10  # scripts/shrink_photos.py

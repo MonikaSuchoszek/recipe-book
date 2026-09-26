@@ -1,0 +1,257 @@
+/* Generated from src/_data/taxonomy.js by src/assets/css/taxonomy.11ty.js. Do not edit. */
+
+.cat-breakfast {
+  --accent: light-dark(#F6B73C, #F7C053);
+  --tint: light-dark(#FEF5E4, #474124);
+  --ink: light-dark(#674D19, #FCE4B5);
+  --solid: light-dark(#946E24, #F6B73C);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-lunch {
+  --accent: light-dark(#8DB63C, #9BBF53);
+  --tint: light-dark(#EFF5E4, #324024);
+  --ink: light-dark(#3B4C19, #D4E3B5);
+  --solid: light-dark(#637F2A, #8DB63C);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-main {
+  --accent: light-dark(#E4583A, #E76C52);
+  --tint: light-dark(#FBE8E3, #432E24);
+  --ink: light-dark(#602518, #F5C0B4);
+  --solid: light-dark(#C94D33, #E4583A);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-soup {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-salad {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-side {
+  --accent: light-dark(#2BA3A0, #44AEAB);
+  --tint: light-dark(#E1F2F2, #1E3D38);
+  --ink: light-dark(#124443, #AEDCDB);
+  --solid: light-dark(#228280, #2BA3A0);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-snack {
+  --accent: light-dark(#8E6CC9, #9C7ECF);
+  --tint: light-dark(#EFEAF7, #323240);
+  --ink: light-dark(#3C2D54, #D4C7EA);
+  --solid: light-dark(#8566BD, #906FCA);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-baking {
+  --accent: light-dark(#C9A46A, #CFAF7C);
+  --tint: light-dark(#F7F2EA, #3E3D2D);
+  --ink: light-dark(#54452D, #EADCC6);
+  --solid: light-dark(#897048, #C9A46A);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-dessert {
+  --accent: light-dark(#E8546B, #EB697D);
+  --tint: light-dark(#FCE7EA, #442D2D);
+  --ink: light-dark(#61232D, #F6BEC7);
+  --solid: light-dark(#C8485C, #E8546B);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-drink {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-sauce-dressing {
+  --accent: light-dark(#5E8C3A, #719A52);
+  --tint: light-dark(#E8EFE3, #283824);
+  --ink: light-dark(#273B18, #C2D3B4);
+  --solid: light-dark(#568135, #5E8C3A);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-vegetarian {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-vegan {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-gluten-free {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-dairy-free {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-high-protein {
+  --accent: light-dark(#2F9E6E, #48AA7F);
+  --tint: light-dark(#E2F1EB, #1F3C2E);
+  --ink: light-dark(#14422E, #B0DAC8);
+  --solid: light-dark(#27855C, #2F9E6E);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-quick {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-one-pot {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-make-ahead {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-freezer-friendly {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-lunchbox {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-legumes {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-fish {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-chicken {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-tofu {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-whole-grains {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-eggs {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-spring {
+  --accent: light-dark(#8DB63C, #9BBF53);
+  --tint: light-dark(#EFF5E4, #324024);
+  --ink: light-dark(#3B4C19, #D4E3B5);
+  --solid: light-dark(#637F2A, #8DB63C);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-summer {
+  --accent: light-dark(#F6B73C, #F7C053);
+  --tint: light-dark(#FEF5E4, #474124);
+  --ink: light-dark(#674D19, #FCE4B5);
+  --solid: light-dark(#946E24, #F6B73C);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-autumn {
+  --accent: light-dark(#F28C38, #F49A50);
+  --tint: light-dark(#FDEFE3, #463823);
+  --ink: light-dark(#663B18, #FAD3B3);
+  --solid: light-dark(#A96227, #F28C38);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-winter {
+  --accent: light-dark(#4AA8D8, #60B2DD);
+  --tint: light-dark(#E6F3FA, #243E43);
+  --ink: light-dark(#1F475B, #BADEF0);
+  --solid: light-dark(#377CA0, #4AA8D8);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-kid-friendly {
+  --accent: light-dark(#E8546B, #EB697D);
+  --tint: light-dark(#FCE7EA, #442D2D);
+  --ink: light-dark(#61232D, #F6BEC7);
+  --solid: light-dark(#C8485C, #E8546B);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}

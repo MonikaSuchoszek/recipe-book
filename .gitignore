@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local secrets and machine-specific settings
+.env
+.claude/settings.local.json
+
+# Tool caches and logs
+.cache/
+npm-debug.log*
+
+# Design mockups and screenshots from Claude sessions, not part of the site
+Claude outputs/
+
+# OS clutter
+.DS_Store
+Thumbs.db
