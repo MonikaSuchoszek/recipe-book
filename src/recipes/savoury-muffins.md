@@ -10,10 +10,9 @@ gallery:
   - file: closeup.jpg
     caption: Close-up of the mix-ins
 servings:
-  amount: 12
+  amount: 18
   unit: muffins
   unitSingular: muffin
-  note: Estimated for a standard 12-hole muffin tin; the original recipe doesn't state a yield.
 ingredients:
   Batter:
     - name: flour
@@ -42,16 +41,19 @@ ingredients:
     - name: garlic
       amount: 1
       unit: clove
-  Add-ins:
-    - name: cheddar
-      amount: 200
+      note: finely grated
+  Mix-ins:
+    - name: mozzarella
+      amount: 100
       unit: g
       note: grated
     - name: mix-ins
-      amount: 500
-      unit: ml
-      note: about 2 glasses, e.g. halved olives, spring onion, sun-dried tomatoes, capers from a jar, leek
+      amount: 2
+      unit: cup
+      note: e.g. halved olives, spring onion, sun-dried tomatoes, capers from a jar, leek
 ---
 
-1. Combine the ingredients, mixing only until they come together (don't overmix).
-2. Bake at 180 °C for 25 minutes.
+1. Preheat the oven to 180 °C and line a muffin tin with paper/silicon cases.
+2. Mix the batter ingredients until just combined (don't overmix).
+3. Gently fold in the mozzarella and mix-ins.
+4. Divide over the tin and bake for about 30 minutes, until golden.

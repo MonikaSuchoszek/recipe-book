@@ -43,7 +43,7 @@
 <body>
 <header class="doc"><div>
   <h1>Recipe Book, specification</h1>
-  <p>Living document. Add features here as we discuss them. Version 1.6, 2026-09-26.</p>
+  <p>Living document. Add features here as we discuss them. Version 1.9, 2026-09-26.</p>
 </div></header>
 <main>
 
@@ -157,8 +157,8 @@
   <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
   <tr><td><code>name</code></td><td>string</td><td class="req">yes</td><td>Ingredient name, e.g. "rolled oats".</td></tr>
   <tr><td><code>amount</code></td><td>number</td><td>no</td><td>Quantity for <code>servings.amount</code> portions. Decimals allowed (0.5). Omit for "to taste" items.</td></tr>
-  <tr><td><code>unit</code></td><td>string</td><td>no</td><td>Metric only: g, kg, ml, l, tsp, tbsp, pinch, clove, handful, piece, can, ... Always written in the <strong>singular</strong>; words get a plural on display when the shown amount is more than 1 (½ clove, 1 clove, 1½ cloves, 2 handfuls), abbreviations never change (2 tbsp). Omit for countable items ("2 eggs").</td></tr>
-  <tr><td><code>note</code></td><td>string</td><td>no</td><td>Preparation or remark: "finely chopped", "to serve", "optional".</td></tr>
+  <tr><td><code>unit</code></td><td>string</td><td>no</td><td>Metric: g, kg, ml, l, tsp, tbsp, pinch, clove, handful, piece, can, ... plus <code>cup</code> for loose ingredients that are easier to measure by volume (chopped vegetables, mix-ins). Always written in the <strong>singular</strong>; words get a plural on display when the shown amount is more than 1 (½ clove, 1 clove, 1½ cloves, 2 handfuls, 2 cups), abbreviations never change (2 tbsp). A plural unit (<code>cups</code>, <code>cup(s)</code>) fails the build with the singular to write instead. Omit for countable items ("2 eggs").</td></tr>
+  <tr><td><code>note</code></td><td>string</td><td>no</td><td>Preparation or remark: "finely chopped", "to serve", "optional". Never a quantity: notes don't scale with the portion counter, so "about 2 cups" goes in <code>amount</code> and <code>unit</code>. A note with a number followed by g, kg, ml, l, tsp, tbsp or cup fails the build.</td></tr>
   <tr><td><code>scale</code></td><td>boolean</td><td>no (default true)</td><td>Set to <code>false</code> for amounts that should not change with portions (a pinch of salt, 1 bay leaf).</td></tr>
 </table>
 <p>Unknown fields in an item (for example a typo like <code>ammount</code>) fail the build with the file name, the ingredient and the list of allowed fields.</p>
@@ -171,7 +171,7 @@
 </ul>
 
 <h3>Validation</h3>
-<p>The build <strong>fails with a clear message</strong> (file name + missing field) when a required field is missing or has the wrong type, or when a category or tag is not in the fixed list (see <a href="#taxonomy">Categories and tags</a> for the message format). This keeps broken recipes out of the published site.</p>
+<p>The build <strong>fails with a clear message</strong> (file name + missing field) when a required field is missing or has the wrong type, when an ingredient unit is written in the plural or a note contains a quantity, or when a category or tag is not in the fixed list (see <a href="#taxonomy">Categories and tags</a> for the message format). This keeps broken recipes out of the published site.</p>
 
 <!-- ============================================================ -->
 <h2 id="taxonomy">4. Categories and tags</h2>
@@ -192,18 +192,18 @@ export default {
   palette: {
     leaf: "#2F9E6E", herb: "#5E8C3A", avocado: "#8DB63C", teal: "#2BA3A0",
     sky: "#4AA8D8", plum: "#8E6CC9", berry: "#E8546B", tomato: "#E4583A",
-    carrot: "#F28C38", citrus: "#F6B73C", oat: "#C9A46A",
+    carrot: "#F28C38", citrus: "#F6B73C", oat: "#C9A46A", rose: "#D9609B",
   },
 
   categories: [
     { name: "Breakfast",        color: "citrus",  illustration: "breakfast.svg" },
-    { name: "Lunch",            color: "avocado", illustration: "lunch.svg" },
     { name: "Main",             color: "tomato",  illustration: "main.svg" },
     { name: "Soup",             color: "carrot",  illustration: "soup.svg" },
     { name: "Salad",            color: "leaf",    illustration: "salad.svg" },
     { name: "Side",             color: "teal",    illustration: "side.svg" },
     { name: "Snack",            color: "plum",    illustration: "snack.svg" },
     { name: "Baking",           color: "oat",     illustration: "baking.svg" },
+    { name: "Cake",             color: "rose",    illustration: "cake.svg" },
     { name: "Dessert",          color: "berry",   illustration: "dessert.svg" },
     { name: "Drink",            color: "sky",     illustration: "drink.svg" },
     { name: "Sauce &amp; Dressing", color: "herb",    illustration: "sauce.svg",
@@ -274,7 +274,7 @@ export default {
   Did you mean "Breakfast"?
 
   Supported categories (11):
-    Breakfast, Lunch, Main, Soup, Salad, Side, Snack, Baking,
+    Breakfast, Main, Soup, Salad, Side, Snack, Baking, Cake,
     Dessert, Drink, Sauce &amp; Dressing
 
   Is "Breakfst" truly a new category? Add it to src/_data/taxonomy.js
@@ -283,7 +283,7 @@ export default {
     { name: "Breakfst", color: "leaf", illustration: "plate.svg" },
 
   color:        one of leaf, herb, avocado, teal, sky, plum, berry,
-                tomato, carrot, citrus, oat, or a hex value like "#2F9E6E"
+                tomato, carrot, citrus, oat, rose, or a hex value like "#2F9E6E"
   illustration: an SVG in src/assets/illustrations/ (plate.svg is the
                 generic placeholder)
 
@@ -396,10 +396,10 @@ ingredients:
   <tr><td>g, ml below 100</td><td>round to whole number</td><td>42.9 g → 43 g</td></tr>
   <tr><td>g, ml reaching 1000 or more</td><td>switch to kg / l, max 2 decimals, trailing zeros removed</td><td>1250 g → 1.25 kg, 2000 ml → 2 l</td></tr>
   <tr><td>kg, l dropping below 1</td><td>switch to g / ml and apply the g/ml rules</td><td>0.25 kg → 250 g</td></tr>
-  <tr><td>Units without fixed size (tsp, tbsp, pieces, no unit)</td><td>round to nearest ¼ and show as fraction</td><td>1.33 tsp → 1¼ tsp, 2.5 eggs → 2½ eggs</td></tr>
+  <tr><td>Units without fixed size (tsp, tbsp, cup, pieces, no unit)</td><td>round to nearest ¼ and show as fraction</td><td>1.33 tsp → 1¼ tsp, 1.33 cups → 1¼ cups, 2.5 eggs → 2½ eggs</td></tr>
   <tr><td>Result would be 0</td><td>show the smallest step instead</td><td>¼ tsp</td></tr>
 </table>
-<p>Unit switching: amounts in g/kg and ml/l are converted to the base unit (g, ml) after scaling, rounded, and then shown in kg or l when they reach 1000. This works in both directions, so a recipe written in kg shows grams when scaled down. Other units (tsp, tbsp, pinch, pieces, ...) are never converted. The same logic will be reused to add up amounts in the future shopping list.</p>
+<p>Unit switching: amounts in g/kg and ml/l are converted to the base unit (g, ml) after scaling, rounded, and then shown in kg or l when they reach 1000. This works in both directions, so a recipe written in kg shows grams when scaled down. Other units (tsp, tbsp, cup, pinch, pieces, ...) are never converted. The same logic will be reused to add up amounts in the future shopping list.</p>
 
 <!-- ============================================================ -->
 <h2 id="pages">7. Pages and navigation</h2>
@@ -582,13 +582,13 @@ gallery:
 <table>
   <tr><th>Category</th><th>File</th><th>Subject</th></tr>
   <tr><td>Breakfast</td><td><code>breakfast.svg</code></td><td>Porridge bowl with berries and banana, rising sun</td></tr>
-  <tr><td>Lunch</td><td><code>lunch.svg</code></td><td>Layered sandwich</td></tr>
   <tr><td>Main</td><td><code>main.svg</code></td><td>Plate with fish, greens and lemon, fork and knife</td></tr>
   <tr><td>Soup</td><td><code>soup.svg</code></td><td>Steaming bowl with herbs and spoon</td></tr>
   <tr><td>Salad</td><td><code>salad.svg</code></td><td>Bowl of leaves, tomatoes and cucumber</td></tr>
   <tr><td>Side</td><td><code>side.svg</code></td><td>Vegetable sticks in a cup with a dip</td></tr>
   <tr><td>Snack</td><td><code>snack.svg</code></td><td>Apple with almonds</td></tr>
   <tr><td>Baking</td><td><code>baking.svg</code></td><td>Loaf of bread and wheat ear</td></tr>
+  <tr><td>Cake</td><td><code>cake.svg</code></td><td>Layer cake with pink drip icing, sprinkles and a cherry, on a cake stand</td></tr>
   <tr><td>Dessert</td><td><code>dessert.svg</code></td><td>Yoghurt parfait with a strawberry</td></tr>
   <tr><td>Drink</td><td><code>drink.svg</code></td><td>Glass with ice, lemon slice and straw</td></tr>
   <tr><td>Sauce &amp; Dressing</td><td><code>sauce.svg</code></td><td>Jar of sauce with an herb sprig</td></tr>
@@ -690,6 +690,8 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.9, 2026-09-26</strong>: <code>cup</code> added as an ingredient unit for loose ingredients measured by volume (scaled in ¼ steps, never converted). Ingredient notes may no longer contain quantities, since they don't scale; plural units and quantities in notes fail the build. Savoury Muffins and Shortcrust Pastry updated to match.</li>
+  <li><strong>1.8, 2026-09-26</strong>: category Lunch removed, category Cake added (after Baking) with a new <code>rose</code> palette colour and a layer cake placeholder illustration.</li>
   <li><strong>1.7, 2026-09-26</strong>: first recipe photos: Savoury Muffins has a main photo and one gallery photo. The gallery now starts with the main photo, with an optional <code>imageCaption</code>.</li>
   <li><strong>1.6, 2026-09-26</strong>: <code>npm run build</code> (and so <code>npm run serve</code>) shrinks photos first, so oversized photos and their metadata never get committed by accident.</li>
   <li><strong>1.5, 2026-09-26</strong>: search page fades in once filter counts have loaded, instead of showing every filter and then hiding the empty ones.</li>

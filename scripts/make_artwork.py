@@ -17,6 +17,7 @@ PALETTE = {
     "leaf": "#2F9E6E", "herb": "#5E8C3A", "avocado": "#8DB63C", "teal": "#2BA3A0",
     "sky": "#4AA8D8", "plum": "#8E6CC9", "berry": "#E8546B", "tomato": "#E4583A",
     "carrot": "#F28C38", "citrus": "#F6B73C", "oat": "#C9A46A",
+    "rose": "#D9609B",
 }
 WHITE = "#FFFFFF"
 CREAM = "#FFFDF7"
@@ -81,19 +82,6 @@ def breakfast(c):
         + "".join(f'<circle cx="{x}" cy="{y}" r="8" fill="{PALETTE[k]}"/>' for x, y, k in berries)
         + "".join(f'<circle cx="{x}" cy="{y}" r="9" fill="#FBEBA8" stroke="#E8CF6E" stroke-width="2"/>' for x, y in [(203, 150), (152, 155), (262, 157)])
         + leaf(208, 138, -30, 0.45, PALETTE["leaf"])
-    )
-
-
-def lunch(c):
-    return (
-        f'<ellipse cx="200" cy="238" rx="100" ry="8" fill="{c["ink"]}" opacity=".15"/>'
-        f'<rect x="108" y="198" width="184" height="34" rx="14" fill="{PALETTE["oat"]}"/>'
-        f'<path d="M104 196 q12 -14 24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 t24 0 v6 H104Z" fill="{PALETTE["avocado"]}"/>'
-        f'<rect x="114" y="176" width="172" height="16" rx="6" fill="{PALETTE["tomato"]}"/>'
-        f'<path d="M112 172 H288 L276 160 H124Z" fill="{PALETTE["citrus"]}"/>'
-        f'<path d="M112 160 Q112 104 200 100 Q288 104 288 160Z" fill="{PALETTE["oat"]}"/>'
-        f'<path d="M140 128 Q200 110 260 128" stroke="{WHITE}" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>'
-        + "".join(f'<ellipse cx="{x}" cy="{y}" rx="3" ry="1.8" fill="{WHITE}" opacity=".8"/>' for x, y in [(170, 120), (200, 114), (228, 121), (186, 136), (216, 134)])
     )
 
 
@@ -180,6 +168,26 @@ def baking(c):
     )
 
 
+def cake(c):
+    drips = [(122, 22), (146, 34), (172, 18), (196, 30), (222, 20), (246, 36), (268, 24)]
+    sprinkles = [(150, 122, 30, "citrus"), (178, 118, -20, "sky"), (212, 124, 60, WHITE), (240, 119, -40, "leaf"), (262, 125, 15, "citrus")]
+    return (
+        f'<ellipse cx="200" cy="254" rx="100" ry="8" fill="{c["ink"]}" opacity=".15"/>'
+        f'<path d="M184 230 H216 L226 250 H174Z" fill="{WHITE}" opacity=".9"/>'
+        f'<rect x="92" y="222" width="216" height="11" rx="5.5" fill="{WHITE}"/>'
+        f'<rect x="118" y="124" width="164" height="98" rx="10" fill="{PALETTE["oat"]}"/>'
+        f'<rect x="118" y="172" width="164" height="10" fill="#FFF4F4"/>'
+        f'<rect x="118" y="182" width="164" height="5" fill="{c["accent"]}" opacity=".8"/>'
+        f'<path d="M118 206 H282 V212 Q282 222 272 222 H128 Q118 222 118 212Z" fill="{c["ink"]}" opacity=".2"/>'
+        f'<rect x="112" y="110" width="176" height="28" rx="12" fill="{c["accent"]}"/>'
+        + "".join(f'<rect x="{x}" y="126" width="16" height="{d}" rx="8" fill="{c["accent"]}"/>' for x, d in drips)
+        + "".join(f'<rect x="{x - 5}" y="{y - 1.5}" width="10" height="3" rx="1.5" fill="{PALETTE.get(k, k)}" transform="rotate({a} {x} {y})"/>' for x, y, a, k in sprinkles)
+        + f'<path d="M200 98 q4 -18 16 -26" stroke="{PALETTE["herb"]}" stroke-width="3.5" fill="none" stroke-linecap="round"/>'
+        + leaf(212, 76, -20, 0.45, PALETTE["leaf"])
+        + f'<circle cx="200" cy="100" r="13" fill="{PALETTE["tomato"]}"/><circle cx="195" cy="95" r="3.5" fill="{WHITE}" opacity=".6"/>'
+    )
+
+
 def dessert(c):
     return (
         f'<ellipse cx="200" cy="250" rx="60" ry="7" fill="{c["ink"]}" opacity=".15"/>'
@@ -241,13 +249,13 @@ def plate(c):
 # file name -> (palette colour, drawing); names match the category entries in taxonomy.js
 ILLUSTRATIONS = {
     "breakfast.svg": ("citrus", breakfast, "Illustration of a porridge bowl with berries"),
-    "lunch.svg": ("avocado", lunch, "Illustration of a sandwich"),
     "main.svg": ("tomato", main_dish, "Illustration of a plate with fish and greens"),
     "soup.svg": ("carrot", soup, "Illustration of a steaming bowl of soup"),
     "salad.svg": ("leaf", salad, "Illustration of a salad bowl"),
     "side.svg": ("teal", side, "Illustration of vegetable sticks with a dip"),
     "snack.svg": ("plum", snack, "Illustration of an apple and nuts"),
     "baking.svg": ("oat", baking, "Illustration of a loaf of bread and wheat"),
+    "cake.svg": ("rose", cake, "Illustration of a layer cake with a cherry on a cake stand"),
     "dessert.svg": ("berry", dessert, "Illustration of a yoghurt parfait with a strawberry"),
     "drink.svg": ("sky", drink, "Illustration of a glass with lemon and a straw"),
     "sauce.svg": ("herb", sauce, "Illustration of a jar of sauce with herbs"),

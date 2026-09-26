@@ -25,7 +25,7 @@ ingredients:
   - name: cold water
     amount: 2
     unit: tbsp
-    note: up to 3 tbsp, as needed
+    note: a little more if the dough is too dry
 ---
 
 1. Cut the butter into small cubes.

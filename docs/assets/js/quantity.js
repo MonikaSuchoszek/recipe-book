@@ -11,7 +11,7 @@ const METRIC = {
 
 // Units that are abbreviations never get a plural form
 const ABBREVIATIONS = new Set(["g", "kg", "ml", "l", "tsp", "tbsp", "cm", "mm"]);
-const IRREGULAR_PLURALS = { leaf: "leaves", loaf: "loaves", knife: "knives" };
+export const IRREGULAR_PLURALS = { leaf: "leaves", loaf: "loaves", knife: "knives" };
 
 const FRACTIONS = { 0: "", 0.25: "¼", 0.5: "½", 0.75: "¾" };
 

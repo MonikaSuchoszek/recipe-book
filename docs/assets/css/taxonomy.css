@@ -8,14 +8,6 @@
   --on-solid: light-dark(#FFFFFF, #121814);
 }
 
-.cat-lunch {
-  --accent: light-dark(#8DB63C, #9BBF53);
-  --tint: light-dark(#EFF5E4, #324024);
-  --ink: light-dark(#3B4C19, #D4E3B5);
-  --solid: light-dark(#637F2A, #8DB63C);
-  --on-solid: light-dark(#FFFFFF, #121814);
-}
-
 .cat-main {
   --accent: light-dark(#E4583A, #E76C52);
   --tint: light-dark(#FBE8E3, #432E24);
@@ -61,6 +53,14 @@
   --tint: light-dark(#F7F2EA, #3E3D2D);
   --ink: light-dark(#54452D, #EADCC6);
   --solid: light-dark(#897048, #C9A46A);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.cat-cake {
+  --accent: light-dark(#D9609B, #DE73A7);
+  --tint: light-dark(#FAE9F1, #412F37);
+  --ink: light-dark(#5B2841, #F1C3D9);
+  --solid: light-dark(#B65182, #D9609B);
   --on-solid: light-dark(#FFFFFF, #121814);
 }
 
