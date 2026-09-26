@@ -35,12 +35,15 @@ export default {
     // Image markup is prepared here because templates can't await inside loops
     media: async (data) => {
       const image = imageInfo(data);
+      // The header crops the main photo, so the gallery leads with it to show it uncropped
+      const extraPhotos = data.gallery ?? [];
+      const galleryPhotos = data.image && extraPhotos.length ? [{ file: data.image, caption: data.imageCaption }, ...extraPhotos] : extraPhotos;
       const [header, card, thumbnail, gallery] = await Promise.all([
         recipeImage(image, "header", data.title),
         recipeImage(image, "card", data.title),
         plannerImage(image),
         Promise.all(
-          (data.gallery ?? []).map(async (photo) => ({
+          galleryPhotos.map(async (photo) => ({
             caption: photo.caption ?? "",
             ...(await galleryImage(data.page.fileSlug, photo.file)),
           })),

@@ -773,6 +773,9 @@ body:has(dialog[open]) { overflow: hidden; }
     display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px;
     border-radius: var(--pill); color: var(--muted); font-weight: 700; text-decoration: none;
   }
+  /* Without flex the inline SVG sits on the text baseline, which lifts it above the label's center */
+  .top-nav .nav-icon { display: flex; }
+  .top-nav .nav-label { line-height: 1; }
   .top-nav .icon { width: 20px; height: 20px; }
   .top-nav a:hover { color: var(--text); background: var(--surface-sunken); }
   .top-nav a[aria-current="page"] { color: var(--primary-text); background: var(--mint); }

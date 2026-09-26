@@ -40,6 +40,7 @@ A recipe without photos shows its category illustration, so photos are optional 
    title: Sponge Cake (Biszkopt)
    image: sponge-cake.jpg          # main photo: page header, recipe card, planner, social preview
    imagePosition: center 40%       # optional: which part stays visible when the photo is cropped
+   imageCaption: Fresh from the oven  # optional: caption of the main photo in the gallery
    gallery:                        # optional: extra photos in a row below the method
      - file: whisked-whites.jpg
        caption: Egg whites whisked to stiff peaks

@@ -4,6 +4,11 @@ description: Cheesy muffins with olives, sun-dried tomatoes or whatever mix-ins 
 date: 2026-09-26
 categories: [Baking, Snack]
 tags: [vegetarian, lunchbox]
+image: savoury-muffins.jpg
+imageCaption: A plate of freshly baked savoury muffins
+gallery:
+  - file: closeup.jpg
+    caption: Close-up of the mix-ins
 servings:
   amount: 12
   unit: muffins

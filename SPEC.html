@@ -122,6 +122,7 @@
   <tr><td><code>ingredients</code></td><td>list of ingredient items, or groups of them</td><td class="req">yes (min 1 item)</td><td>See below.</td></tr>
   <tr><td><code>image</code></td><td>string (file name)</td><td>no</td><td>Main photo, a file in the recipe's photo folder <code>src/assets/images/recipes/&lt;slug&gt;/</code>. Used as header and thumbnail. Falls back to the category placeholder artwork.</td></tr>
   <tr><td><code>imagePosition</code></td><td>string</td><td>no (default <code>center</code>)</td><td>Which part of the main photo stays visible when it is cropped, as a CSS <code>object-position</code>, e.g. <code>center 30%</code> or <code>left</code>. Useful for portrait phone photos.</td></tr>
+  <tr><td><code>imageCaption</code></td><td>string</td><td>no</td><td>Caption of the main photo, shown when it opens in the gallery viewer (see <a href="#assets">Images and artwork</a>).</td></tr>
   <tr><td><code>gallery</code></td><td>list of photo items</td><td>no</td><td>Extra photos (steps, plating, a slice). Each item has <code>file</code> (required, in the same photo folder) and <code>caption</code> (optional). See <a href="#assets">Images and artwork</a>.</td></tr>
   <tr><td><code>description</code></td><td>string</td><td>no</td><td>One sentence teaser for cards and search results.</td></tr>
   <tr><td><code>date</code></td><td>date (YYYY-MM-DD)</td><td>no</td><td>Date added, used for "Recently added". Defaults to the file creation date (set explicitly so it survives git clones).</td></tr>
@@ -545,7 +546,7 @@ ingredients:
 <!-- ============================================================ -->
 <h2 id="assets">11. Images and artwork</h2>
 <ul>
-  <li><strong>No photos exist yet</strong>; every recipe starts with its category placeholder. Photos are added over time.</li>
+  <li>Recipes start with their category placeholder; photos are added over time (the first one: Savoury Muffins).</li>
   <li>One folder per recipe: <code>src/assets/images/recipes/&lt;slug&gt;/</code>. The main photo is named by <code>image</code>, extra photos by <code>gallery</code>. Example:
 <pre><code>image: sponge-cake.jpg
 imagePosition: center 40%
@@ -554,7 +555,7 @@ gallery:
     caption: Egg whites whisked to stiff peaks
   - file: slice.jpg</code></pre></li>
   <li>The main photo is used as header (16:9 crop) and card thumbnail (4:3 crop) with CSS <code>object-fit: cover</code> and <code>imagePosition</code> as <code>object-position</code>. Phone photos in any orientation work.</li>
-  <li><strong>Gallery:</strong> shown as a row of small square thumbnails below the method. Tapping one opens a full screen viewer (native <code>&lt;dialog&gt;</code> with CSS scroll snap, swipe or arrow keys to move, caption underneath). No gallery library. Without JavaScript the thumbnails link to the full image.</li>
+  <li><strong>Gallery:</strong> shown as a row of small square thumbnails below the method, starting with the main photo (uncropped in the viewer, captioned by <code>imageCaption</code>) followed by the <code>gallery</code> photos. Without <code>gallery</code> photos there is no gallery section. Tapping one opens a full screen viewer (native <code>&lt;dialog&gt;</code> with CSS scroll snap, swipe or arrow keys to move, caption underneath). No gallery library. Without JavaScript the thumbnails link to the full image.</li>
   <li>Responsive sizes (WebP, widths 400 / 800 / 1600) are generated at build time with <code>@11ty/eleventy-img</code>, lazy loaded except the header image.</li>
   <li>Validation: a missing photo file fails the build with the recipe, the field and the folder it looked in.</li>
 </ul>
@@ -689,6 +690,7 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.7, 2026-09-26</strong>: first recipe photos: Savoury Muffins has a main photo and one gallery photo. The gallery now starts with the main photo, with an optional <code>imageCaption</code>.</li>
   <li><strong>1.6, 2026-09-26</strong>: <code>npm run build</code> (and so <code>npm run serve</code>) shrinks photos first, so oversized photos and their metadata never get committed by accident.</li>
   <li><strong>1.5, 2026-09-26</strong>: search page fades in once filter counts have loaded, instead of showing every filter and then hiding the empty ones.</li>
   <li><strong>1.4, 2026-09-26</strong>: footer links (All recipes, Search, Planner) removed; they duplicated the top nav and the bottom tabbar. Home page tagline shortened to "Healthy everyday recipes."</li>
