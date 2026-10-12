@@ -2,7 +2,7 @@
 title: Sponge Cake
 description: Classic light Polish sponge, made with only eggs, sugar, flour and potato starch.
 date: 2026-09-26
-categories: [Baking, Dessert]
+categories: [Baking]
 tags: [vegetarian, dairy-free]
 servings:
   amount: 1

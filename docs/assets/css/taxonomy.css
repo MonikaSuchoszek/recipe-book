@@ -255,3 +255,19 @@
   --solid: light-dark(#C8485C, #E8546B);
   --on-solid: light-dark(#FFFFFF, #121814);
 }
+
+.tag-christmas {
+  --accent: light-dark(#8E6CC9, #9C7ECF);
+  --tint: light-dark(#EFEAF7, #323240);
+  --ink: light-dark(#3C2D54, #D4C7EA);
+  --solid: light-dark(#8566BD, #906FCA);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}
+
+.tag-easter {
+  --accent: light-dark(#8E6CC9, #9C7ECF);
+  --tint: light-dark(#EFEAF7, #323240);
+  --ink: light-dark(#3C2D54, #D4C7EA);
+  --solid: light-dark(#8566BD, #906FCA);
+  --on-solid: light-dark(#FFFFFF, #121814);
+}

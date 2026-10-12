@@ -44,5 +44,8 @@ export default {
     { name: "Audience", color: "berry", tags: [
       { name: "kid-friendly" },
     ]},
+    { name: "Occasion", color: "plum", tags: [
+      { name: "Christmas" }, { name: "Easter" },
+    ]},
   ],
 };

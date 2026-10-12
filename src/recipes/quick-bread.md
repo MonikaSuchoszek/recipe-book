@@ -29,11 +29,11 @@ ingredients:
     unit: ml
 ---
 
-1. Mix the dry ingredients in a large bowl (the dough expands a lot and might overflow).
+1. Mix the dry ingredients in a large bowl (the dough expands a lot and might overflow overnight).
 2. Add the warm water and oil, and mix well into a dough using a spoon.
 3. Cover tightly with cling film and leave in the fridge overnight (about 10 h).
 4. In the morning, let it rest for 30 minutes at room temperature.
 5. Dust the counter with flour, knead the dough briefly but vigorously and shape it into a loaf (fairly loosely).
 6. Put an ovenproof dish with a lid into the oven and heat to 250 °C.
-7. Take out the dish and place the loaf inside.
+7. Take out the dish and place the loaf inside (can be tricky as it's very loose but just quickly place inside).
 8. Bake covered at 220 °C for 30 minutes, then another 20 minutes uncovered.

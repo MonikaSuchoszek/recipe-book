@@ -43,7 +43,7 @@
 <body>
 <header class="doc"><div>
   <h1>Recipe Book, specification</h1>
-  <p>Living document. Add features here as we discuss them. Version 1.9, 2026-09-26.</p>
+  <p>Living document. Add features here as we discuss them. Version 1.10, 2026-10-08.</p>
 </div></header>
 <main>
 
@@ -114,7 +114,7 @@
   <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
   <tr><td><code>title</code></td><td>string</td><td class="req">yes</td><td>Name of the dish.</td></tr>
   <tr><td><code>categories</code></td><td>list of strings</td><td class="req">yes (min 1)</td><td>What kind of dish it is. Only terms from the fixed list, see <a href="#taxonomy">Categories and tags</a>.</td></tr>
-  <tr><td><code>tags</code></td><td>list of strings</td><td>no</td><td>Properties of the dish (diet, effort, main ingredient, season, audience). Only terms from the fixed list, see <a href="#taxonomy">Categories and tags</a>.</td></tr>
+  <tr><td><code>tags</code></td><td>list of strings</td><td>no</td><td>Properties of the dish (diet, effort, main ingredient, season, audience, occasion). Only terms from the fixed list, see <a href="#taxonomy">Categories and tags</a>.</td></tr>
   <tr><td><code>servings.amount</code></td><td>positive integer</td><td class="req">yes</td><td>Number of portions the ingredient amounts are written for (e.g. 7).</td></tr>
   <tr><td><code>servings.unit</code></td><td>string (plural)</td><td class="req">yes</td><td>What one portion is, in plural form: servings, waffles, glasses, pancakes, muffins.</td></tr>
   <tr><td><code>servings.unitSingular</code></td><td>string</td><td>no</td><td>Singular form, shown when the counter is at 1. Defaults to <code>unit</code> if omitted.</td></tr>
@@ -231,6 +231,9 @@ export default {
     { name: "Audience", color: "berry", tags: [
       { name: "kid-friendly" },
     ]},
+    { name: "Occasion", color: "plum", tags: [
+      { name: "Christmas" }, { name: "Easter" },
+    ]},
   ],
 };</code></pre>
 
@@ -296,12 +299,13 @@ export default {
   Value:   "legume"
   Did you mean "legumes"?
 
-  Supported tags (21), by group:
+  Supported tags (23), by group:
     Diet             vegetarian, vegan, gluten-free, dairy-free, high-protein
     Effort           quick, one-pot, make-ahead, freezer-friendly, lunchbox
     Main ingredient  legumes, fish, chicken, tofu, whole grains, eggs
     Season           spring, summer, autumn, winter
     Audience         kid-friendly
+    Occasion         Christmas, Easter
 
   Is "legume" truly a new tag? Add it to src/_data/taxonomy.js inside the
   "tags" list of the group it belongs to, for example:
@@ -690,6 +694,7 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.10, 2026-10-08</strong>: new tag group Occasion (<code>plum</code>) with the tags Christmas and Easter, for holiday dishes imported from the handwritten recipe notebook.</li>
   <li><strong>1.9, 2026-09-26</strong>: <code>cup</code> added as an ingredient unit for loose ingredients measured by volume (scaled in ¼ steps, never converted). Ingredient notes may no longer contain quantities, since they don't scale; plural units and quantities in notes fail the build. Savoury Muffins and Shortcrust Pastry updated to match.</li>
   <li><strong>1.8, 2026-09-26</strong>: category Lunch removed, category Cake added (after Baking) with a new <code>rose</code> palette colour and a layer cake placeholder illustration.</li>
   <li><strong>1.7, 2026-09-26</strong>: first recipe photos: Savoury Muffins has a main photo and one gallery photo. The gallery now starts with the main photo, with an optional <code>imageCaption</code>.</li>

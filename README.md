@@ -4,11 +4,41 @@ Static recipe website built with [Eleventy](https://www.11ty.dev/) and hosted on
 https://monikasuchoszek.github.io/recipe-book/. See `SPEC.html` for the full specification.
 
 ## Getting started
+
+### With Docker (dev container)
 1. Open this folder in VS Code and choose **Reopen in Container** (requires Docker and the Dev Containers extension).
 2. Run `claude` in the terminal and log in the first time.
 3. `npm run serve` to preview, `npm run build` to generate `docs/`.
 
 Note: open the dev server at http://127.0.0.1:8080/recipe-book/ (`localhost` may not work from a browser outside the dev container).
+
+### Without Docker (local install)
+The dev container is only a convenience; everything runs just as well straight on your machine.
+
+1. **Install Node.js 18 or newer** from https://nodejs.org/ (built and tested with Node 24). Check with
+   `node --version`.
+2. **Install Python 3** from https://www.python.org/ (tested with 3.13), then its one dependency:
+   ```
+   pip install -r requirements.txt
+   ```
+   This is Pillow, used by the photo shrinking step. The build calls it as `python3`, so make sure
+   `python3 --version` works, not only `python`.
+3. **Install the npm packages** in this folder:
+   ```
+   npm install
+   ```
+4. `npm run serve` to preview at http://localhost:8080/recipe-book/, `npm run build` to generate `docs/`.
+   (`start_server.bat` is a double-click shortcut for `npm run serve` on Windows.)
+
+Claude Code is optional outside the container; install it separately with `npm install -g @anthropic-ai/claude-code`
+if you want it.
+
+#### On Windows: run npm from PowerShell, not Git Bash
+Use PowerShell (or the plain Command Prompt) for `npm install`. Installing from Git Bash creates only Unix-style
+launchers in `node_modules/.bin/`, without the `.cmd` and `.ps1` files that PowerShell needs, and the build then
+fails with `'eleventy' is not recognized as an internal or external command`. If that happens, delete
+`node_modules/` and run `npm install` again from PowerShell. A Git Bash install is not needed either way: the
+PowerShell install produces launchers that work in both shells.
 
 ## Commands
 - `npm run build`: shrink new photos (`npm run photos`), clean `docs/`, run Eleventy (validates every recipe first), build the Pagefind search index

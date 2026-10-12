@@ -20,3 +20,5 @@ Claude outputs/
 # OS clutter
 .DS_Store
 Thumbs.db
+
+recipe_import/
