@@ -4,6 +4,7 @@ description: Light, crisp yeasted Belgian waffles, airy thanks to whipped egg wh
 date: 2026-10-08
 categories: [Breakfast]
 tags: [vegetarian]
+image: brussels-waffles.jpg
 servings:
   amount: 10
   unit: waffles

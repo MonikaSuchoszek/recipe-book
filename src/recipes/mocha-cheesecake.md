@@ -4,6 +4,7 @@ description: Coffee and white chocolate cheesecake on a crisp cocoa shortcrust.
 date: 2026-10-08
 categories: [Cake]
 tags: [vegetarian]
+image: mocha-cheesecake.jpg
 servings:
   amount: 1
   unit: cakes

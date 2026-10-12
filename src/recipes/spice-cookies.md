@@ -4,6 +4,7 @@ description: Crisp, buttery honey cookies with gingerbread spice and cinnamon, p
 date: 2026-10-08
 categories: [Baking, Snack]
 tags: [vegetarian, winter, Christmas]
+image: spice-cookies.jpg
 servings:
   amount: 40
   unit: cookies

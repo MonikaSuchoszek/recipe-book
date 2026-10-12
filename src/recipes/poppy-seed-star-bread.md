@@ -4,6 +4,10 @@ description: Soft, buttery yeast dough layered with poppy seed filling and twist
 date: 2026-10-08
 categories: [Baking]
 tags: [vegetarian, winter, Christmas]
+image: poppy-seed-star-bread.jpg
+gallery:
+  - file: christmas-tree.jpg
+    caption: Shaped as a Christmas tree
 servings:
   amount: 1
   unit: stars

@@ -4,6 +4,7 @@ description: Crunchy broccoli salad with bacon, toasted seeds, walnuts and a swe
 date: 2026-09-26
 categories: [Salad]
 tags: [quick]
+image: broccoli-salad.jpg
 servings:
   amount: 6
   unit: servings

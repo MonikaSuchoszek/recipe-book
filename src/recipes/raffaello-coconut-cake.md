@@ -4,6 +4,10 @@ description: Four layers of sponge with a light coconut and white chocolate crea
 date: 2026-10-08
 categories: [Cake]
 tags: [make-ahead]
+image: raffaello-coconut-cake.jpg
+gallery:
+  - file: slice.jpg
+    caption: A slice showing the layers
 servings:
   amount: 1
   unit: cakes

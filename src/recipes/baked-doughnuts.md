@@ -4,6 +4,10 @@ description: Soft, buttery yeast doughnuts (pączki) baked instead of fried, wit
 date: 2026-10-08
 categories: [Baking]
 tags: [vegetarian]
+image: baked-doughnuts.jpg
+gallery:
+  - file: cutting-dough.jpg
+    caption: Cutting out the circles
 servings:
   amount: 16
   unit: doughnuts

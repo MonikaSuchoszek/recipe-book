@@ -4,6 +4,8 @@ description: Creamy, set twaróg and Greek yoghurt cheesecake studded with Oreos
 date: 2026-10-08
 categories: [Cake]
 tags: [make-ahead]
+image: oreo-cheesecake.jpg
+imageCaption: The layered variant, with chocolate sponge instead of a base
 servings:
   amount: 1
   unit: cakes
@@ -61,3 +63,5 @@ ingredients:
 
 ## Tips
 Soak the gelatine in cold water for about 10 minutes to absorb the water. Squeeze water out, Microwave for 5 seconds at a time on low power, stirring between each interval, until the gelatin has completely dissolved and the liquid is clear. Be careful not to let it boil, as excessive heat can affect its setting ability. If needed, let it cool slightly before adding it to your mixture, but don't allow it to set.
+
+Layered variant: skip the date base and layer the Oreo cheese mixture between layers of chocolate sponge cake, like a layered sponge cake.

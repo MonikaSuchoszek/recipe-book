@@ -4,6 +4,8 @@ description: Spiced chocolate muffins with ground almonds, flaxseed, dried figs,
 date: 2026-10-08
 categories: [Baking]
 tags: [vegetarian, lunchbox]
+image: fig-walnut-muffins.jpg
+imageCaption: Finished with flaked almonds
 servings:
   amount: 12
   unit: muffins
@@ -66,4 +68,4 @@ ingredients:
 1. Preheat the oven to 180 °C and line a muffin tin with paper cases.
 2. Mix all the dry ingredients.
 3. Add the milk and oil and mix, then stir in the walnuts, figs and chocolate.
-4. Divide over the tin and bake for 25–30 minutes, until a skewer comes out dry.
+4. Divide over the tin, sprinkle with flaked almonds if you like, and bake for 25–30 minutes, until a skewer comes out dry.

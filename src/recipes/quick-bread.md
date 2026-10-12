@@ -4,6 +4,10 @@ description: No-knead overnight loaf with a crackling crust, baked in a covered 
 date: 2026-09-26
 categories: [Baking]
 tags: [vegan, dairy-free, make-ahead]
+image: quick-bread.jpg
+gallery:
+  - file: in-the-dish.jpg
+    caption: Freshly baked in the dish
 servings:
   amount: 1
   unit: loaves

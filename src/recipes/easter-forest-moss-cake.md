@@ -4,6 +4,7 @@ description: Bright green spinach sponge with a lemony mascarpone cream, crumble
 date: 2026-10-08
 categories: [Cake]
 tags: [vegetarian, spring, Easter]
+image: easter-forest-moss-cake.jpg
 servings:
   amount: 1
   unit: cakes

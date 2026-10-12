@@ -4,6 +4,7 @@ description: Dense, fudgy amaretto chocolate base under a light, creamy fresh st
 date: 2026-10-08
 categories: [Cake]
 tags: [make-ahead, summer]
+image: chocolate-cake-strawberry-mousse.jpg
 servings:
   amount: 1
   unit: cakes
