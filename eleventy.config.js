@@ -1,9 +1,12 @@
+import path from "node:path";
 import { contrastWarnings, taxonomy } from "./lib/taxonomy.js";
 import { formatInfo, formatProblems, validateRecipes, warn } from "./lib/validate-recipes.js";
 import { renderFavicons } from "./lib/images.js";
 import { icon } from "./lib/icons.js";
 import { PATH_PREFIX, withPrefix } from "./lib/paths.js";
 import site from "./src/_data/site.js";
+
+const SOURCE_LINK = /^([^:?#]+\.md)(#.*)?$/;
 
 const FONT_FILES = ["latin", "latin-ext"].flatMap((subset) =>
   [400, 700, 800].map((weight) => `nunito-${subset}-${weight}-normal.woff2`),
@@ -18,6 +21,25 @@ export default function (eleventyConfig) {
   for (const file of FONT_FILES) {
     eleventyConfig.addPassthroughCopy({ [`node_modules/@fontsource/nunito/files/${file}`]: `assets/fonts/${file}` });
   }
+
+  // Content links to another page's source file (`[sauce](salted-caramel-sauce.md)`) so Eleventy
+  // works out the final URL; a link to a file that doesn't exist fails the build instead of 404ing.
+  // Done in the Markdown renderer, not as an HTML transform, which would re-serialise every page.
+  let urlsByInputPath = {};
+  eleventyConfig.on("eleventy.contentMap", ({ inputPathToUrl }) => (urlsByInputPath = inputPathToUrl));
+  eleventyConfig.amendLibrary("md", (markdown) => {
+    const renderDefault = markdown.renderer.rules.link_open ?? ((tokens, i, options, env, self) => self.renderToken(tokens, i, options));
+    markdown.renderer.rules.link_open = (tokens, i, options, env, self) => {
+      const [, file, fragment = ""] = tokens[i].attrGet("href").match(SOURCE_LINK) ?? [];
+      if (file) {
+        const inputPath = "./" + path.posix.join(path.posix.dirname(env.page.inputPath), file);
+        const url = urlsByInputPath[inputPath]?.[0];
+        if (!url) throw new Error(`Broken link in ${env.page.inputPath}: ${file} does not exist.`);
+        tokens[i].attrSet("href", withPrefix(url) + fragment);
+      }
+      return renderDefault(tokens, i, options, env, self);
+    };
+  });
 
   eleventyConfig.addWatchTarget("lib/");
   eleventyConfig.setServerOptions({ port: 8080 });

@@ -44,4 +44,4 @@ ingredients:
 
 ## Tips
 
-- Delicious with [salted caramel sauce](../salted-caramel-sauce/) drizzled over the top.
+- Delicious with [salted caramel sauce](salted-caramel-sauce.md) drizzled over the top.

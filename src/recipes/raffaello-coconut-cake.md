@@ -48,7 +48,7 @@ ingredients:
       note: to decorate
 ---
 
-1. Bake the [Sponge Cake](../sponge-cake/) in a 20 cm tin, let it cool and cut it into 4 layers.
+1. Bake the [Sponge Cake](sponge-cake.md) in a 20 cm tin, let it cool and cut it into 4 layers.
 2. Soak the gelatine sheets in cold water, then squeeze them out and dissolve them over a water bath. Let cool slightly.
 3. Whisk the coconut milk with a mixer until airy, then mix in the cooled gelatine. Chill in the fridge for about 1 hour, until it starts to set.
 4. Meanwhile, blitz the desiccated coconut in a blender until fine. Melt the white chocolate and let it cool a little.

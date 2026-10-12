@@ -167,6 +167,7 @@
 <ul>
   <li>Free Markdown. Convention: a numbered list of steps, optionally followed by a <code>## Tips</code> section.</li>
   <li>No headings needed for ingredients: those are rendered from the frontmatter.</li>
+  <li>Links to another recipe point at its source file, e.g. <code>[salted caramel sauce](salted-caramel-sauce.md)</code>. The build turns this into the recipe's URL (with the <code>/recipe-book/</code> prefix), and a link to a file that doesn't exist fails the build. Never write the URL itself (<code>../salted-caramel-sauce/</code>): nothing checks it.</li>
   <li>A recipe whose method hasn't been written yet may say so in one line. It still builds; the build info lists it next to the recipes without photos, as a reminder.</li>
 </ul>
 
@@ -666,7 +667,7 @@ gallery:
 <ul>
   <li>Deploy: commit the rebuilt <code>docs/</code> and push to <code>main</code>. GitHub Pages is set to "Deploy from a branch", <code>main</code>, <code>/docs</code>.</li>
   <li><strong>Public URL: <code>https://monikasuchoszek.github.io/recipe-book/</code>.</strong> Eleventy's <code>pathPrefix</code> is <code>"/recipe-book/"</code> and <code>site.url</code> in <code>src/_data/site.js</code> is the full URL (used for canonical links and social previews).</li>
-  <li>All internal links and asset paths go through Eleventy's <code>url</code> filter (HTML Base plugin), so no hardcoded <code>/</code> paths. The planner and search scripts get the prefix from a <code>data-base</code> attribute on <code>&lt;html&gt;</code>.</li>
+  <li>All internal links and asset paths in templates go through Eleventy's <code>url</code> filter (HTML Base plugin), so no hardcoded <code>/</code> paths. The planner and search scripts get the prefix from a <code>data-base</code> attribute on <code>&lt;html&gt;</code>.</li>
   <li>GitHub setup: a project site on the default GitHub Pages domain of the <code>MonikaSuchoszek</code> account, so the repository must be named <strong><code>recipe-book</code></strong> (the folder name locally doesn't matter). No custom domain and no <code>CNAME</code> file.</li>
   <li><code>npm run serve</code> also serves under <code>/recipe-book/</code> locally, so prefix bugs show up during development.</li>
 </ul>
@@ -694,6 +695,7 @@ gallery:
 <!-- ============================================================ -->
 <h2 id="changelog">16. Changelog</h2>
 <ul>
+  <li><strong>1.11, 2026-10-12</strong>: links between recipes point at the source file (<code>sponge-cake.md</code>) instead of a hand-written URL. A Markdown link rule in <code>eleventy.config.js</code> resolves them to the final, prefixed URL and fails the build on a missing file. The four existing links were converted.</li>
   <li><strong>1.10, 2026-10-08</strong>: new tag group Occasion (<code>plum</code>) with the tags Christmas and Easter, for holiday dishes imported from the handwritten recipe notebook.</li>
   <li><strong>1.9, 2026-09-26</strong>: <code>cup</code> added as an ingredient unit for loose ingredients measured by volume (scaled in ¼ steps, never converted). Ingredient notes may no longer contain quantities, since they don't scale; plural units and quantities in notes fail the build. Savoury Muffins and Shortcrust Pastry updated to match.</li>
   <li><strong>1.8, 2026-09-26</strong>: category Lunch removed, category Cake added (after Baking) with a new <code>rose</code> palette colour and a layer cake placeholder illustration.</li>

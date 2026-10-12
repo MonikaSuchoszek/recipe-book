@@ -83,6 +83,7 @@ Any other field in an item (e.g. a typo like `ammount`) fails the build.
 
 - Free Markdown. Convention: a numbered list of steps, optionally followed by a `## Tips` section.
 - No ingredient heading or list in the body; ingredients render from the frontmatter.
+- Link to another recipe by its file name: `[Sponge Cake](sponge-cake.md)`. The build turns it into the right URL and fails if the file doesn't exist. Never write the URL (`../sponge-cake/`) by hand.
 - A recipe whose method isn't written yet may say so in one line; it still builds.
 
 ## Example

@@ -40,7 +40,7 @@ ingredients:
       note: for dusting
 ---
 
-1. Bake the [Sponge Cake](../sponge-cake/) in a 20 cm tin, let it cool and cut it into 3 layers.
+1. Bake the [Sponge Cake](sponge-cake.md) in a 20 cm tin, let it cool and cut it into 3 layers.
 2. Whisk the egg yolks with the sugar for a few minutes until pale and fluffy.
 3. Add the mascarpone and mix on low speed just until combined.
 4. Whip the cream and fold it in, then add amaretto to taste.

@@ -81,4 +81,4 @@ ingredients:
 
 ## Tips
 
-- Lovely with [salted caramel sauce](../salted-caramel-sauce/) drizzled on top.
+- Lovely with [salted caramel sauce](salted-caramel-sauce.md) drizzled on top.

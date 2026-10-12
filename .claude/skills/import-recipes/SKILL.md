@@ -21,6 +21,7 @@ Rules that most often break the build or the portion scaler:
 - Units are singular (`cup`, not `cups`) and metric where possible.
 - A `note` never holds a quantity: "about 2 cups" belongs in `amount` + `unit`.
 - No `permalink` in frontmatter; the file name becomes the URL, so pick it carefully (lowercase, hyphenated, English, e.g. `pierogi-ruskie.md`).
+- Links to other recipes use the file name: `[Sponge Cake](sponge-cake.md)`, never `../sponge-cake/`.
 - `scale: false` for things like a pinch of salt or a bay leaf.
 - Only categories and tags that exist in `taxonomy.js`.
 
