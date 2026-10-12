@@ -4,6 +4,8 @@ description: Szarlotka sypana, the easiest apple cake, with dry layers of flour 
 date: 2026-10-08
 categories: [Cake]
 tags: [vegetarian, autumn]
+image: apple-semolina-cake.jpg
+imageCaption: Drizzled with salted caramel sauce
 servings:
   amount: 1
   unit: cakes
@@ -39,3 +41,7 @@ ingredients:
 4. Spread a third of the dry mix over the bottom, then half the apples sprinkled with cinnamon. Repeat with another third of the dry mix and the rest of the apples and cinnamon, and finish with the last third of the dry mix.
 5. Cover the top with thin slices of the frozen butter.
 6. Bake at 180 °C for about 60 minutes. Put a large tray underneath, as excess apple juice may leak out.
+
+## Tips
+
+- Delicious with [salted caramel sauce](../salted-caramel-sauce/) drizzled over the top.
